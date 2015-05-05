@@ -1,9 +1,5 @@
 /*
-!/etc
-/etc/*
 !/etc/nginx
-!/var
-/var/*
-!/var/www
-/var/www/*
 !/var/www/html
+!/config
+/config/node_modules
