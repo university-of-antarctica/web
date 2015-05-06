@@ -1,0 +1,8 @@
+There is your traditional void open() from fstream.h:
+
+  http://www.cplusplus.com/reference/fstream/fstream/open/
+
+
+Then there is the int open() for Unix specifically, fcntl.h:
+
+  http://rabbit.eng.miami.edu/info/functions/unixio.html

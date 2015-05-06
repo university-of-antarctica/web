@@ -1,5 +1,1 @@
-/*
-!/etc/nginx
-!/var/www/html
-!/config
 /config/node_modules

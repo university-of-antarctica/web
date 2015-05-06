@@ -5,3 +5,13 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+#header_image {
+  border-right: 1px solid black;
+}
+#header_title {
+  color: #00A3E8;
+}
+#header_subtitle {
+  color: grey;
+}
