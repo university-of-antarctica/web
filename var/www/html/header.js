@@ -8,6 +8,8 @@ var multi_line_header_string = String.raw`
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="css/extras.css" rel="stylesheet" type="text/css" />
+    <link href="css/offcanvas.css" rel="stylesheet" type="text/css" />
+    <script src="js/offcanvas.js"></script>
     <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
     <meta charset="utf-8">
@@ -38,7 +40,7 @@ var multi_line_header_string = String.raw`
                       <img src="images/UANT_logo.jpg" class="img-rounded" alt="uant-logo" width="65px" >
                     </div>
                     <div class="col-sm-10" id="header_text">
-                      <h4 id="header_title"> The University of Antarctica </h4>
+                      <h3 id="header_title"> The University of Antarctica </h3>
                       <small id="header_subtitle">A place as real as it is cold, honest. </small>
                     </div>
                 </div>
@@ -63,7 +65,7 @@ var multi_line_header_string = String.raw`
             </div>
           </div>
         </div>
-	<div class="row row-offcanvas row-offcanvas-right">
+	<div class="row row-offcanvas row-offcanvas-left">
 	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
           	<div class="list-group">
             		<a href="#" class="list-group-item active">Link</a>
@@ -79,6 +81,9 @@ var multi_line_header_string = String.raw`
           	</div>
         </div>
 
+  <p class="pull-right visible-xs">
+    <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle side-bar</button>
+  </p>
 	<div class="col-xs-12 col-sm-9">
 `;
 
