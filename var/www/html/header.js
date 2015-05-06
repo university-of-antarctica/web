@@ -27,7 +27,7 @@ var multi_line_header_string = String.raw`
 
       <!-- entire page -->
       <div class="col-md-2"></div>
-      <div class="container col-md-8">
+      <div class="container col-md-8 well">
       
         <!-- nav bar -->
         <div class="navbar navbar-default" role="navigation">
@@ -63,6 +63,23 @@ var multi_line_header_string = String.raw`
             </div>
           </div>
         </div>
+	<div class="row row-offcanvas row-offcanvas-right">
+	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+          	<div class="list-group">
+            		<a href="#" class="list-group-item active">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+            		<a href="#" class="list-group-item">Link</a>
+          	</div>
+        </div>
+
+	<div class="col-xs-12 col-sm-9">
 `;
 
 document.write(multi_line_header_string);
