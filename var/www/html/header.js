@@ -27,18 +27,13 @@ var multi_line_header_string = String.raw`
   <!-- Choose Random Background -->
     <script type="text/javascript">
 
-      function setBG(chosen_image_url){
-        $("#background").attr('src',chosen_image_url)
-        .css('width','100%')
-        .css('width','100%')
-        .css('position','fixed')
-        .css('left','0px')
-        .css('top','0px')
-        .css('z-index','-1')
-        .css('fixed','yes');
-      }
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
 
-      $(document).ready(function() {
+      function SelectRandomBackgroundImageURL(){
+
         var images = ['01.jpg', '02.jpg', '03.jpg', 
         '04.jpg', '05.jpg', '06.jpg'];
 
@@ -48,10 +43,14 @@ var multi_line_header_string = String.raw`
           )
         ];
         var chosen_image_url = './images/backgrounds/'+chosen_image_name;
+        return chosen_image_url;
+      }
 
-        setBG(chosen_image_url);
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").css('opacity','1');
+      }
 
-      });
     </script>
 
   </head>
