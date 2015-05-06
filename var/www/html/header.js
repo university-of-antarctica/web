@@ -13,10 +13,33 @@ var multi_line_header_string = String.raw`
     <meta charset="utf-8">
     <title>The University of Antarctica</title>
     
+  <!-- Load Carousel Stuff -->
     <script>
       $(document).ready(function(){
         $('.carousel').carousel();
       });
+    </script>
+
+  <!-- Choose Random Background -->
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+      var images = ['01.jpg', '02.jpg', '03.jpg', 
+      '04.jpg', '05.jpg', '06.jpg'];
+
+      var chosen_image_name = images[
+        Math.floor(
+          Math.random() * images.length
+        )
+      ];
+      var chosen_image_url = './images/backgrounds/'+chosen_image_name
+
+
+      document.body.style.background = 
+        "#f3f3f3 url(" 
+        + chosen_image_url 
+        + ") no-repeat top fixed";
+    });
     </script>
 
   </head>
