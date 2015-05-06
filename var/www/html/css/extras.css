@@ -1,9 +1,19 @@
 body {
-    background-color: #cccccc;
+    background-color: #6996AD;
     background-size: 1920px 1080px;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+#background{
+    -webkit-animation: fadein 2.5s; /* Safari and Chrome */
+    -moz-animation: fadein 2.5s; /* Firefox */
+    -ms-animation: fadein 2.5s; /* Internet Explorer */
+    -o-animation: fadein 2.5s; /* Opera */
+    animation: fadein 2.5s;
+}
+
+
 
 #header_text {
   border-left: 1px solid black;
@@ -14,3 +24,33 @@ body {
 #header_subtitle {
   color: grey;
 }
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari and Chrome */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}​
+
+/* Opera */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}​

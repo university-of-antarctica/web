@@ -22,26 +22,36 @@ var multi_line_header_string = String.raw`
       });
     </script>
 
+
+
   <!-- Choose Random Background -->
     <script type="text/javascript">
 
-    $(document).ready(function() {
-      var images = ['01.jpg', '02.jpg', '03.jpg', 
-      '04.jpg', '05.jpg', '06.jpg'];
+      function setBG(chosen_image_url){
+        $("#background").attr('src',chosen_image_url)
+        .css('width','100%')
+        .css('width','100%')
+        .css('position','fixed')
+        .css('left','0px')
+        .css('top','0px')
+        .css('z-index','-1')
+        .css('fixed','yes');
+      }
 
-      var chosen_image_name = images[
-        Math.floor(
-          Math.random() * images.length
-        )
-      ];
-      var chosen_image_url = './images/backgrounds/'+chosen_image_name
+      $(document).ready(function() {
+        var images = ['01.jpg', '02.jpg', '03.jpg', 
+        '04.jpg', '05.jpg', '06.jpg'];
 
+        var chosen_image_name = images[
+          Math.floor(
+            Math.random() * images.length
+          )
+        ];
+        var chosen_image_url = './images/backgrounds/'+chosen_image_name;
 
-      document.body.style.background = 
-        "#f3f3f3 url(" 
-        + chosen_image_url 
-        + ") no-repeat top fixed";
-    });
+        setBG(chosen_image_url);
+
+      });
     </script>
 
   </head>
@@ -51,6 +61,7 @@ var multi_line_header_string = String.raw`
       <br/>
 
       <!-- entire page -->
+      <img id="background">
       <div class="col-md-2"></div>
       <div class="container col-md-8 well">
       
