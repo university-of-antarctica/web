@@ -28,12 +28,12 @@ var multi_line_header_string = String.raw`
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Academics</a></li>
-          <li><a href="#">Athletics</a></li>
-          <li><a href="#">Clubs</a></li>
-          <li><a href="#">About Us</a></li>
+          <li class="active"><a href="index.html">Home</a></li>
+          <li><a href="blog/">Message From the Chancellors</a></li>
+          <li><a href="academics">Academics</a></li>
+          <li><a href="athletics">Athletics</a></li>
+          <li><a href="clubs">Clubs</a></li>
+          <li><a href="aboutuniversity">About UAnt</a></li>
         </ul>
       </div>
     </div>
