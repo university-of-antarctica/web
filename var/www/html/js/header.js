@@ -25,7 +25,7 @@ var multi_line_header_string = String.raw`
 
 
   <!-- Choose Random Background -->
-    <script src="background.js"></script>
+    <script src="js/background.js"></script>
 
   </head>
   <body>
@@ -39,12 +39,7 @@ var multi_line_header_string = String.raw`
       <div class="container col-md-8 well">
       
         <!-- nav bar -->
-        <script src="navbar.js"></script>
-
-  <!-- Side Bar -->
-	<script src="sidebar.js"></script>
-
-	<div class="col-xs-12 col-sm-9">
+        <script src="js/navbar.js"></script>
 `;
 
 document.write(multi_line_header_string);
