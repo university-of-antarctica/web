@@ -6,8 +6,11 @@ var multi_line_header_string = String.raw`
        $(document).ready(function() {
          var bg_img_url = SelectRandomBackgroundImageURL();
          SetImageAsBackground(bg_img_url);
+         ShowBody();
        });
-
+      function ShowBody(){
+        $("body").css("opacity","1");
+      }
       function SelectRandomBackgroundImageURL(){
 
         var images = ['01.jpg', '02.jpg', '03.jpg', 

@@ -3,6 +3,15 @@ body {
     background-size: 1920px 1080px;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    opacity:0; /* start at 0 opacity until it is loaded */
+
+
+    -webkit-transition: all .2s ease; /* Safari and Chrome */
+    -moz-transition: all    .2s ease; /* Firefox */
+    -ms-transition: all     .2s ease; /* Internet Explorer */
+    -o-transition: all      .2s ease; /* Opera */
+    transition: all         .2s ease;
+    -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! */
 }
 
 #background{
