@@ -1,4 +1,3 @@
-
 var multi_line_header_string = String.raw`
 
   <!-- nav bar -->
@@ -10,7 +9,7 @@ var multi_line_header_string = String.raw`
                 <img src="images/UANT_logo.jpg" class="img-rounded" alt="uant-logo" width="65px" >
               </div>
               <div class="col-sm-10" id="header_text">
-                <h3 id="header_title"> The University of Antarctica </h3>
+                <h3 id="header_title"><tt> The University of Antarctica </tt></h3>
                 <small id="header_subtitle">A place as real as it is cold, honest. </small>
               </div>
           </div>
@@ -23,14 +22,18 @@ var multi_line_header_string = String.raw`
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
         </button>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Products</a></li>
           <li><a href="#">Blog</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#">Academics</a></li>
+          <li><a href="#">Athletics</a></li>
+          <li><a href="#">Clubs</a></li>
+          <li><a href="#">About Us</a></li>
         </ul>
       </div>
     </div>

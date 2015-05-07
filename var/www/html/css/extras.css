@@ -34,6 +34,7 @@ body {
 }
 #header_title {
   color: #00A3E8;
+  font-family: courier;
 }
 #header_subtitle {
   color: grey;
