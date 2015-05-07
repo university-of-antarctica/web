@@ -4,7 +4,7 @@ var multi_line_header_string = String.raw`
   <!DOCTYPE html>
   <html>
   <head>
-  <meta name="description" content="The University of Antarctica" />
+    <meta name="description" content="The University of Antarctica" />
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="css/extras.css" rel="stylesheet" type="text/css" />
@@ -14,18 +14,9 @@ var multi_line_header_string = String.raw`
     <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
     <meta charset="utf-8">
     <title>The University of Antarctica</title>
-    
-  <!-- Load Carousel Stuff -->
-    <script>
-      $(document).ready(function(){
-        $('.carousel').carousel();
-      });
-    </script>
 
-
-
-  <!-- Choose Random Background -->
-    <script src="js/background.js"></script>
+    <!-- Choose Random Background -->
+      <script src="js/background.js"></script>
 
   </head>
   <body>
