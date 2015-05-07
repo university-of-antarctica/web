@@ -4,12 +4,31 @@ var multi_line_carousel_string = String.raw`
   <script>
     $(document).ready(function(){
       $('.carousel').carousel();
+
+      $('#myCarousel').on('slid.bs.carousel',function(){
+        
+        setTimeout(function(){
+          // ForceRedraw();
+          // ForceRedraw2();
+          console.log("redrawing");
+        }, 300);
+
+      });
+
+
     });
+    function ForceRedraw(){
+      $(window).trigger('resize');
+    }
+    function ForceRedraw2(){
+      $('.container').hide().show(0);
+    }
   </script>
 
 
   <!--  Carousel - consult the Twitter Bootstrap docs at 
-        http://twitter.github.com/bootstrap/javascript.html#carousel -->
+        http://getbootstrap.com/javascript/#carousel-->
+  <div id="carouselContainer" class="well">
   <div id="myCarousel" class="carousel slide"><!-- class of slide 
     for animation -->
     <ol class="carousel-indicators">
@@ -41,8 +60,9 @@ var multi_line_carousel_string = String.raw`
     <!--  Next and Previous controls below
           href values must reference the id for this carousel -->
       <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#myCarousel-id" data-slide="next">&rsaquo;</a>
+      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
   </div><!-- /.carousel -->
+  </div><!-- /#carouselContainer -->
   <br>
  `;
 

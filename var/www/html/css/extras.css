@@ -11,7 +11,6 @@ body {
     -ms-transition: all     .2s ease; /* Internet Explorer */
     -o-transition: all      .2s ease; /* Opera */
     transition: all         .2s ease;
-    -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! */
 }
 
 #background{
@@ -31,9 +30,14 @@ body {
     -ms-transition: all 2.5s ease; /* Internet Explorer */
     -o-transition: all 2.5s ease; /* Opera */
     transition: all 2.5s ease;
-    -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! */
+    -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! For images larger than the screen */
 
     
+}
+
+.carousel-inner{
+  width: auto;
+  height: 400px;
 }
 
 
