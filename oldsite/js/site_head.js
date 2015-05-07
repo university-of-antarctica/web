@@ -1,5 +1,13 @@
+<!-- REMOVE FROM HEADER -->
+  <meta name="description" content="The University of Antarctica" />
 
-var multi_line_header_string = String.raw`
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="http://uofantarctica.com/css/extras.css" rel="stylesheet" type="text/css" />
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
+    <meta charset="utf-8">
+
   <!-- Choose Random Background -->
     <script type="text/javascript">
 
@@ -18,7 +26,7 @@ var multi_line_header_string = String.raw`
             Math.random() * images.length
           )
         ];
-        var chosen_image_url = './images/backgrounds/'+chosen_image_name;
+        var chosen_image_url = 'http://uofantarctica.com/images/backgrounds/'+chosen_image_name;
         return chosen_image_url;
       }
 
@@ -28,6 +36,4 @@ var multi_line_header_string = String.raw`
       }
 
     </script>
-`;
 
-document.write(multi_line_header_string);

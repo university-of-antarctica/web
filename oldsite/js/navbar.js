@@ -6,7 +6,7 @@ var multi_line_header_string = String.raw`
         <div class="container-fluid">
           <div class="row">
               <div class="col-sm-2" id="header_image">
-                <img src="images/UANT_logo.jpg" class="img-rounded" alt="uant-logo" width="65px" >
+                <img src="http://uofantarctica.com/images/UANT_logo.jpg" class="img-rounded" alt="uant-logo" width="65px" >
               </div>
               <div class="col-sm-10" id="header_text">
                 <h3 id="header_title"><tt> The University of Antarctica </tt></h3>

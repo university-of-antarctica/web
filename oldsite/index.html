@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <script src="http://uofantarctica.com/js/site_head.js"></script>
+
+  <link href="http://uofantarctica.com/css/offcanvas.css" rel="stylesheet" type="text/css" />
+  
+  <script>
+    $(document).ready(function(){
+      $('.carousel').carousel();
+    });
+    
+
+    $(document).ready(function () {
+      $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+      });
+    });
+ </script>
+
+</head>
+<body>
+
+    <!-- entire page -->
+    <script src="http://uofantarctica.com/js/header.js"></script>
+
+
+<div class="row row-offcanvas row-offcanvas-right">
+<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+          <div class="list-group">
+            <a href="#" class="list-group-item">Our Projects</a>
+            <a href="#" class="list-group-item">GitHub</a>
+            <a href="#" class="list-group-item">In Progress</a>
+            <a href="#" class="list-group-item">Open Issues</a>
+            <a href="#" class="list-group-item">I hate steven</a>
+          </div>
+</div>
+
+<div class="col-xs-12 col-sm-9">
+
+      <!--  Carousel - consult the Twitter Bootstrap docs at 
+            http://twitter.github.com/bootstrap/javascript.html#carousel -->
+      <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
+        <div class="carousel-inner">
+          <div class="item active"><!-- class of active since it's the first item -->
+            <img src="images/steven.jpg" alt="" />
+            <div class="carousel-caption">
+              <p>Can you believe this guy?</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="images/steven1.jpg" alt="" />
+            <div class="carousel-caption">
+              <p>Just look at him</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="images/steven2.jpg" alt="" />
+            <div class="carousel-caption">
+              <p>Does he ever even get his haircut?!?!</p>
+            </div>
+          </div>
+        </div><!-- /.carousel-inner -->
+        <!--  Next and Previous controls below
+              href values must reference the id for this carousel -->
+          <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+      </div><!-- /.carousel -->
+      <br>
+
+
+      <!-- three highlights -->
+      <div class="row">
+        <div class="col-sm-4">
+          <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
+          <h2>Excellent</h2>
+          <p>Hoodie tousled pop-up, DIY semiotics artisan direct trade PBR&B Thundercats keytar salvia fingerstache Etsy messenger bag. Synth direct trade cornhole, Austin hella trust fund next level cred irony ethnic. Photo booth Pitchfork fingerstache McSweeney's Vice Williamsburg. McSweeney's forage 90's Shoreditch Pitchfork mumblecore, roof party American Apparel.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        
+        <div class="col-sm-4">
+          <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
+          <h2>Chill</h2>
+          <p>8-bit Williamsburg gentrify Schlitz gastropub Thundercats, kitsch drinking vinegar actually fingerstache. Hashtag flexitarian try-hard skateboard, paleo typewriter Portland raw denim fashion axe swag cornhole iPhone gluten-free. Bicycle rights Cosby sweater slow-carb tousled YOLO, gluten-free wolf asymmetrical literally freegan trust fund normcore.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        
+        <div class="col-sm-4"> 
+          <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
+          <h2>Radical</h2>
+          <iframe src="http://gpwclark.net:8283/jsfs.html" height="350px" frameborder="0" scrolling="no"></iframe>
+          <p>DIY leggings flannel, fashion axe swag pour-over flexitarian ethical before they sold out brunch sartorial Thundercats wayfarers keytar dreamcatcher. Post-ironic iPhone mumblecore, Shoreditch Banksy irony YOLO twee bitters retro. Trust fund twee polaroid Schlitz Pinterest. Literally farm-to-table gentrify chambray.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+      <script src="js/footer.js"></script>
+</body>
+</html>

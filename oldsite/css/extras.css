@@ -23,11 +23,7 @@ body {
     -o-transition: all 2.5s ease; /* Opera */
     transition: all 2.5s ease;
     -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! */
-
-    
 }
-
-
 
 #header_text {
   border-left: 1px solid black;
