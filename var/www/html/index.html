@@ -1,8 +1,63 @@
----
-layout: main
----
+<!DOCTYPE html>
+<html>
 
-<div class="row row-offcanvas row-offcanvas-right">
+  <!-- REMOVE FROM HEADER -->
+  <meta name="description" content="The University of Antarctica" />
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="http://uofantarctica.com/css/extras.css" rel="stylesheet" type="text/css" />
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
+    <meta charset="utf-8">
+
+  <!-- Choose Random Background -->
+    <script type="text/javascript">
+
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
+
+      function SelectRandomBackgroundImageURL(){
+
+        var images = ['01.jpg', '02.jpg', '03.jpg', 
+        '04.jpg', '05.jpg', '06.jpg'];
+
+        var chosen_image_name = images[
+          Math.floor(
+            Math.random() * images.length
+          )
+        ];
+        var chosen_image_url = 'http://uofantarctica.com/images/backgrounds/'+chosen_image_name;
+        return chosen_image_url;
+      }
+
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").css('opacity','1');
+      }
+
+    </script>
+
+
+
+  <body>
+
+          <br/>
+      <br/>
+      <br/>
+
+      <!-- entire page -->
+      <img id="background">
+      <div class="col-md-2"></div>
+      <div class="container col-md-8 well">
+      
+        <!-- nav bar -->
+        <script src="http://uofantarctica.com/js/navbar.js"></script>
+
+
+    <div class="row row-offcanvas row-offcanvas-right">
 <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
           <div class="list-group">
             <a href="#" class="list-group-item">Our Projects</a>
@@ -20,19 +75,27 @@ layout: main
       <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
         <div class="carousel-inner">
           <div class="item active"><!-- class of active since it's the first item -->
-            <img src="http://uofantarctica.com/images/steven.jpg" alt="" />
+            <img src="images/steven.jpg" alt="" />
             <div class="carousel-caption">
               <p>Can you believe this guy?</p>
             </div>
           </div>
           <div class="item">
-            <img src="http://uofantarctica.com/images/steven1.jpg" alt="" />
+            <img src="images/steven1.jpg" alt="" />
             <div class="carousel-caption">
               <p>Just look at him</p>
             </div>
           </div>
           <div class="item">
-            <img src="http://uofantarctica.com/images/steven2.jpg" alt="" />
+
+          <div class="item">
+            <img src="images/steven1.jpg" alt="" />
+            <div class="carousel-caption">
+              <p>Just look at him</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="images/steven2.jpg" alt="" />
             <div class="carousel-caption">
               <p>Does he ever even get his haircut?!?!</p>
             </div>
@@ -73,3 +136,20 @@ layout: main
     </div>
   </div>
 
+
+
+    
+var multi_line_footer_string = String.raw`
+  </div> <!-- end container -->  
+  <div class="col-md-2"></div> 
+  </body> 
+  </html>
+
+`;
+
+document.write(multi_line_footer_string);
+
+
+  </body>
+
+</html>

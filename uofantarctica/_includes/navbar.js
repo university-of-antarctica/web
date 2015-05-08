@@ -1,15 +1,6 @@
-      <br/>
-      <br/>
-      <br/>
-
-      <!-- entire page -->
-      <img id="background">
-      <div class="col-md-2"></div>
-      <div class="container col-md-8 well">
-      
   <!-- nav bar -->
  <div class="navbar navbar-default" role="navigation">
-    <div class="well">
+    <div class="well"> 
         <div class="container-fluid">
           <div class="row">
               <div class="col-sm-2" id="header_image">
@@ -45,4 +36,3 @@
       </div>
     </div>
   </div>
-

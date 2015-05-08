@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+  <!-- REMOVE FROM HEADER -->
+  <meta name="description" content="The University of Antarctica" />
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="http://uofantarctica.com/css/extras.css" rel="stylesheet" type="text/css" />
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
+    <meta charset="utf-8">
+
+  <!-- Choose Random Background -->
+    <script type="text/javascript">
+
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
+
+      function SelectRandomBackgroundImageURL(){
+
+        var images = ['01.jpg', '02.jpg', '03.jpg', 
+        '04.jpg', '05.jpg', '06.jpg'];
+
+        var chosen_image_name = images[
+          Math.floor(
+            Math.random() * images.length
+          )
+        ];
+        var chosen_image_url = 'http://uofantarctica.com/images/backgrounds/'+chosen_image_name;
+        return chosen_image_url;
+      }
+
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").css('opacity','1');
+      }
+
+    </script>
+
+
+
+  <body>
+
+          <br/>
+      <br/>
+      <br/>
+
+      <!-- entire page -->
+      <img id="background">
+      <div class="col-md-2"></div>
+      <div class="container col-md-8 well">
+      
+        <!-- nav bar -->
+        <script src="http://uofantarctica.com/js/navbar.js"></script>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Welcome to Jekyll!</h1>
+    <p class="post-meta">May 7, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <p>You’ll find this post in your <code>_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code>jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+
+<p>To add new posts, simply add a file in the <code>_posts</code> directory that follows the convention <code>YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+
+<p>Jekyll also offers powerful support for code snippets:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="nb">puts</span> <span class="s2">&quot;Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">end</span>
+<span class="n">print_hi</span><span class="p">(</span><span class="s1">&#39;Tom&#39;</span><span class="p">)</span>
+<span class="c1">#=&gt; prints &#39;Hi, Tom&#39; to STDOUT.</span></code></pre></div>
+
+<p>Check out the <a href="http://jekyllrb.com">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://github.com/jekyll/jekyll-help">Jekyll’s dedicated Help repository</a>.</p>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    
+var multi_line_footer_string = String.raw`
+  </div> <!-- end container -->  
+  <div class="col-md-2"></div> 
+  </body> 
+  </html>
+
+`;
+
+document.write(multi_line_footer_string);
+
+
+  </body>
+
+</html>
