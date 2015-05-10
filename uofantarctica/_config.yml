@@ -12,3 +12,6 @@ github_username:  uofantarctica
 destination: ../var/www/html/
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
+
