@@ -40,6 +40,9 @@
     activate :livereload
   end
 
+configure :build do 
+  set :http_prefix, "/web"
+end
 
 
 activate :deploy do |deploy|
