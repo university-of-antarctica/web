@@ -29,7 +29,7 @@
     <br/>
     <br/>
     <br/>
-    <img id="background">
+    <%= image_tag "background.png", :id=>"background" %>
     <!-- left padding -->
     <div class="col-md-2"></div>
     <div class="container col-md-8 well">
@@ -41,7 +41,6 @@
               <div class="row">
                   <div class="col-sm-2" id="header_image">
                     <%= image_tag "UANT_logo.jpg", :class=>"img-rounded", :width=>"65px"%>
-                    <!-- <img src="images/UANT_logo.jpg" class="img-rounded" alt="uant-logo" width="65px" > -->
                   </div>
                   <div class="col-sm-10" id="header_text">
                     <h3 id="header_title"><tt> The University of Antarctica </tt></h3>
@@ -63,12 +62,18 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="blog/">Message From the Chancellors</a></li>
-              <li><a href="academics">Academics</a></li>
-              <li><a href="athletics">Athletics</a></li>
-              <li><a href="clubs">Clubs</a></li>
-              <li><a href="aboutuniversity">About UAnt</a></li>
+              <li id="navbar-home">
+                <%= link_to 'Home', '/' %></li>
+              <li id="navbar-blog">
+                <%= link_to 'Message From the Chancellors', 'blog' %></li>
+              <li id="navbar-academics">
+                 <%= link_to 'Academics', 'academics' %></li>
+              <li id="navbar-athletics">
+                 <%= link_to 'Athletics', 'athletics' %></li>
+              <li id="navbar-clubs">
+                 <%= link_to 'Clubs', 'clubs' %></li>
+              <li id="navbar-aboutuniversity">
+                 <%= link_to 'About UANT', 'aboutuniversity' %></li>
             </ul>
           </div>
         </div>

@@ -17,7 +17,7 @@
             Math.random() * images.length
           )
         ];
-        var chosen_image_url = './images/backgrounds/'+chosen_image_name;
+        var chosen_image_url = '/images/backgrounds/'+chosen_image_name;
         return chosen_image_url;
       }
 
