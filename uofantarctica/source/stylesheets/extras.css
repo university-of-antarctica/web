@@ -1,0 +1,54 @@
+body {
+    background-color: #6996AD;
+    background-size: 1920px 1080px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity:0; /* start at 0 opacity until it is loaded */
+
+
+    -webkit-transition: all .2s ease; /* Safari and Chrome */
+    -moz-transition: all    .2s ease; /* Firefox */
+    -ms-transition: all     .2s ease; /* Internet Explorer */
+    -o-transition: all      .2s ease; /* Opera */
+    transition: all         .2s ease;
+}
+
+#background{
+    opacity:0; /* start at 0 opacity until it is loaded */
+
+    z-index: -1;
+    position: fixed;
+    width: 100%;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+
+
+
+    -webkit-transition: all 2.5s ease; /* Safari and Chrome */
+    -moz-transition: all 2.5s ease; /* Firefox */
+    -ms-transition: all 2.5s ease; /* Internet Explorer */
+    -o-transition: all 2.5s ease; /* Opera */
+    transition: all 2.5s ease;
+    -webkit-backface-visibility: hidden; /* prevents flickering at end of transition if you are scrolling! For images larger than the screen */
+
+    
+}
+
+.carousel-inner{
+  width: auto;
+  height: 400px;
+}
+
+
+
+#header_text {
+  border-left: 1px solid black;
+}
+#header_title {
+  color: #00A3E8;
+  font-family: courier;
+}
+#header_subtitle {
+  color: grey;
+}
