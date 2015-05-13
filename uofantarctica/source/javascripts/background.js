@@ -2,11 +2,8 @@
        $(document).ready(function() {
          var bg_img_url = SelectRandomBackgroundImageURL();
          SetImageAsBackground(bg_img_url);
-         // ShowBody();
        });
-      // function ShowBody(){
-      //   $("body").css("opacity","1");
-      // }
+
       function SelectRandomBackgroundImageURL(){
 
         var images = ['01.jpg', '02.jpg', '03.jpg', 
@@ -23,7 +20,7 @@
 
       function SetImageAsBackground(chosen_image_url){
           $("#background").attr("src",chosen_image_url);
-          setTimeout(function(){
+          $("#background").load(function(evt){
             $("#background").css('opacity','1');
-          },0);
+          });
       }
