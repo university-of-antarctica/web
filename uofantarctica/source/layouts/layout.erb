@@ -19,7 +19,9 @@
     <%= javascript_include_tag "http://code.jquery.com/jquery.min.js" %>
     <%= javascript_include_tag "http://getbootstrap.com/dist/js/bootstrap.js" %>
     <%= javascript_include_tag "offcanvas" %>
-    <%= javascript_include_tag  "background" %>
+
+    <!-- <%= partial "background" %> -->
+    <%= javascript_include_tag url_for("background") %>
 
 
   </head>
@@ -61,18 +63,31 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+
               <li id="navbar-home">
-                <%= link_to 'Home', '/' %></li>
+                <%= link_to 'Home', 
+                url_for('/') %></li>
+
               <li id="navbar-blog">
-                <%= link_to 'Message From the Chancellors', url_for('blog.html') %></li>
+                <%= link_to 'Message From the Chancellors', 
+                url_for('blog.html') %></li>
+
               <li id="navbar-academics">
-                 <%= link_to 'Academics', './academics.html' %></li>
+                 <%= link_to 'Academics', 
+                 url_for('academics.html') %></li>
+
               <li id="navbar-athletics">
-                 <%= link_to 'Athletics', './athletics.html' %></li>
+                 <%= link_to 'Athletics', 
+                 url_for('athletics.html') %></li>
+
               <li id="navbar-clubs">
-                 <%= link_to 'Clubs', 'clubs.html' %></li>
+                 <%= link_to 'Clubs', 
+                 'clubs.html' %></li>
+
               <li id="navbar-aboutuniversity">
-                 <%= link_to 'About UANT', 'aboutuniversity.html' %></li>
+                 <%= link_to 'About UANT', 
+                 url_for('aboutuniversity.html') %></li>
+
             </ul>
           </div>
         </div>

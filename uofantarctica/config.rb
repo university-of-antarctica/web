@@ -40,9 +40,15 @@
     activate :livereload
   end
 
-configure :build do 
-  set :http_prefix, "/web"
-end
+# configure :build do 
+#   set :http_prefix, "/web"
+# end
+
+# helpers do
+#   def link_to(url, *args, &block)
+#     super("web/#{url}", *args, &block)
+#   end
+# end
 
 
 activate :deploy do |deploy|
@@ -72,7 +78,8 @@ set :js_dir, 'javascripts'
 set :images_dir, 'images'
 
 
-
+set :relative_links, true
+activate :relative_assets
 
 # Build-specific configuration
 configure :build do

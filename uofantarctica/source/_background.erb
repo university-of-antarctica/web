@@ -1,4 +1,4 @@
-
+<script>
        $(document).ready(function() {
          var bg_img_url = SelectRandomBackgroundImageURL();
          SetImageAsBackground(bg_img_url);
@@ -14,7 +14,7 @@
             Math.random() * images.length
           )
         ];
-        var chosen_image_url = 'images/backgrounds/'+chosen_image_name;
+        var chosen_image_url = url_for('backgrounds/'+chosen_image_name);
         return chosen_image_url;
       }
 
@@ -24,3 +24,4 @@
             $("#background").css('opacity','1');
           });
       }
+</script>
