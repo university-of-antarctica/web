@@ -23,5 +23,7 @@
 
       function SetImageAsBackground(chosen_image_url){
           $("#background").attr("src",chosen_image_url);
-          $("#background").css('opacity','1');
+          setTimeout(function(){
+            $("#background").css('opacity','1');
+          },0);
       }
