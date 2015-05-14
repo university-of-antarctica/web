@@ -7,6 +7,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     autoprefixer-rails (5.1.11)
       execjs
       json
@@ -69,6 +70,10 @@ GEM
       middleman-sprockets (>= 3.1.2)
       sass (>= 3.4.0, < 4.0)
       uglifier (~> 2.5)
+    middleman-blog (3.5.3)
+      addressable (~> 2.3.5)
+      middleman-core (~> 3.2)
+      tzinfo (>= 0.3.0)
     middleman-bootstrap-navbar (2.0.0)
       bootstrap-navbar (~> 2.0)
       middleman-core (>= 3.0)
@@ -148,6 +153,7 @@ DEPENDENCIES
   bootstrap-sass
   jquery-middleman
   middleman (~> 3.3.12)
+  middleman-blog
   middleman-bootstrap-navbar
   middleman-deploy
   middleman-livereload (~> 3.1.0)

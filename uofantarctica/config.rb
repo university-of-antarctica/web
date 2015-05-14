@@ -40,25 +40,15 @@
     activate :livereload
   end
 
-# configure :build do 
-#   set :http_prefix, "/web"
-# end
-
-# helpers do
-#   def link_to(url, *args, &block)
-#     super("web/#{url}", *args, &block)
-#   end
-# end
 
 
 activate :deploy do |deploy|
   deploy.method = :git
   deploy.build_before = true
-  # Optional Settings
-  # deploy.user  = 'steven' # no default
-  # deploy.port  = 5309 # ssh port, default: 22
-  # deploy.clean = true # remove orphaned files on remote host, default: false
-  # deploy.flags = '-rltgoDvzO --no-p --del' # add custom flags, default: -avz
+end
+
+activate :blog do |blog|
+  blog.prefix = "blog"
 end
 
 activate :bootstrap_navbar
@@ -79,7 +69,6 @@ set :images_dir, 'images'
 
 
 set :relative_links, true
-activate :relative_assets
 
 # Build-specific configuration
 configure :build do
@@ -93,7 +82,8 @@ configure :build do
   # activate :asset_hash
 
   # Use relative URLs
-    activate :relative_assets
+  # gh-pages had trouble when I tried removing this
+    activate :relative_assets 
 
   # Or use a different image path
   # set :http_prefix, "/Content/images/"

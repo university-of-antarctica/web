@@ -8,6 +8,8 @@
     <!-- Use title if it's in the page YAML frontmatter -->
     <title><%= current_page.data.title || "The Middleman" %></title>
 
+    <%= favicon_tag(url_for("/favicon.ico")) %>
+
     <!-- Stylesheets -->
     <%= stylesheet_link_tag "normalize", "all" %>
     <%= stylesheet_link_tag "http://getbootstrap.com/dist/css/bootstrap.css" %>
@@ -20,9 +22,55 @@
     <%= javascript_include_tag "http://getbootstrap.com/dist/js/bootstrap.js" %>
     <%= javascript_include_tag "offcanvas" %>
 
-    <!-- <%= partial "background" %> -->
-    <%= javascript_include_tag url_for("background") %>
+    <script>
+      $(document).ready(function(){
+        $("#<%= current_page.data.active_navbar_tab %>").addClass("active");
+      });
+    </script>
 
+
+    <script>
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
+
+      function SelectRandomBackgroundImageURL(){
+         var images = ['01.jpg', '02.jpg', '03.jpg', 
+            '04.jpg', '05.jpg', '06.jpg'];
+
+            var chosen_image_name = images[
+              Math.floor(
+                Math.random() * images.length
+              )
+            ];
+
+            // I have to use a URL to an actual resource
+            // in order to get this relative URL to work properly
+            // Ideally I could just get the URL to the directory
+            // So I'll get the URL to this resource and then delete the last
+            // few characters to get the relative URL to the directory...
+            var specific_image_url = '<%=url_for("/images/backgrounds/blue.jpg")%>';
+            var image_directory_url = DirectoryURLFromFileURL(specific_image_url);
+
+            var chosen_image_url = image_directory_url + chosen_image_name;
+            return chosen_image_url;
+      }
+
+      function DirectoryURLFromFileURL(file_url){
+         var last_slash_index = file_url.lastIndexOf("/");
+         var directory_url = file_url.substring(
+              0,last_slash_index+1);
+         return directory_url;
+      }
+
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").load(function(evt){
+            $("#background").css('opacity','1');
+          });
+      }
+    </script>
 
   </head>
 
@@ -41,7 +89,7 @@
             <div class="container-fluid">
               <div class="row">
                   <div class="col-sm-2" id="header_image">
-                    <%= image_tag "UANT_logo.jpg", :class=>"img-rounded", :width=>"65px"%>
+                    <%= image_tag url_for("UANT_logo.jpg"), :class=>"img-rounded", :width=>"65px"%>
                   </div>
                   <div class="col-sm-10" id="header_text">
                     <h3 id="header_title"><tt> The University of Antarctica </tt></h3>
@@ -66,27 +114,27 @@
 
               <li id="navbar-home">
                 <%= link_to 'Home', 
-                url_for('index.html') %></li>
+                url_for('/index.html') %></li>
 
               <li id="navbar-blog">
                 <%= link_to 'Message From the Chancellors', 
-                url_for('blog.html') %></li>
+                url_for('/blog.html') %></li>
 
               <li id="navbar-academics">
                  <%= link_to 'Academics', 
-                 url_for('academics.html') %></li>
+                 url_for('/academics.html') %></li>
 
               <li id="navbar-athletics">
                  <%= link_to 'Athletics', 
-                 url_for('athletics.html') %></li>
+                 url_for('/athletics.html') %></li>
 
               <li id="navbar-clubs">
                  <%= link_to 'Clubs', 
-                 url_for('clubs.html') %></li>
+                 url_for('/clubs.html') %></li>
 
               <li id="navbar-aboutuniversity">
                  <%= link_to 'About UANT', 
-                 url_for('blog/') %></li>
+                 url_for('/blog/index.html') %></li>
 
             </ul>
           </div>
