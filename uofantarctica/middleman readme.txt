@@ -1,5 +1,14 @@
 middleman
 
+startup:
+  clone project
+  switch to middleman branch
+  >> cd uofantarctica
+  >> bundle install
+  >> middleman server
+
+
+
 file structure:
   source folder:
     images folder
@@ -83,3 +92,13 @@ index.html.erb
       ---
 
     As you can see, the title "variable" gets passed to the layout template as "current_page.data.title"
+
+
+blogging
+  
+  middleman article ARTICLENAME
+    automatically creates a file in the blog folder named 2015-XX-XX-ARTICLENAME.html.markdown.
+
+    This blog will appear in a list as declared in /blog/index.html.erb
+
+    just go edit that file and you got your blog post
