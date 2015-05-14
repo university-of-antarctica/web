@@ -22,13 +22,14 @@
     <%= javascript_include_tag "http://getbootstrap.com/dist/js/bootstrap.js" %>
     <%= javascript_include_tag "offcanvas" %>
 
+    <!-- Nav Bar Selection -->
     <script>
       $(document).ready(function(){
         $("#<%= current_page.data.active_navbar_tab %>").addClass("active");
       });
     </script>
 
-
+    <!-- Background Selection -->
     <script>
        $(document).ready(function() {
          var bg_img_url = SelectRandomBackgroundImageURL();
