@@ -3,10 +3,21 @@ title: Welcome to Uant
 active_navbar_tab: navbar-home
 ---
 
-  <div class="row row-offcanvas row-offcanvas-right">
+<link href="css/offcanvas.css" rel="stylesheet" type="text/css" />
+    <script src="js/offcanvas.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="offcanvas"]').click(function () {
+      $('.row-offcanvas').toggleClass('active')
+    });
+  });
+</script>
+
+<div class="row row-offcanvas row-offcanvas-right">
   <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
     <div class="list-group">
-      <%= link_to 'Our Projects', '/', {:class=>"list-group-item"} %>
+      <%= link_to 'Our Projects', '/projects.html', {:class=>"list-group-item"} %>
       <%= link_to 'GitHub', 'https://github.com/university-of-antarctica', {:class=>"list-group-item"} %>
       <%= link_to 'In Progress', 'blog', {:class=>"list-group-item"} %>
       <%= link_to 'In Progress', 'blog', {:class=>"list-group-item"} %>
