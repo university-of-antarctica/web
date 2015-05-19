@@ -4,7 +4,12 @@ date: 2015-05-19 14:08 EST
 tags: 
 blog: projects
 category: complete
+layout: projects_layout
 ---
 
-## Snowduino
-This is snowduino
+ <div class="col-sm-4">
+    <img class="img-circle" src="/images/snowduino.jpg" alt="Snowduino">
+    <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
+    GET requests to control what is displayed on the banner.</p>
+    READMORE
+  </div>
