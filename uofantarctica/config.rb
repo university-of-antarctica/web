@@ -55,6 +55,8 @@ end
 activate :blog do |blog|
   blog.name = "projects"
   blog.prefix = "projects"
+  blog.permalink = "{category}/{title}.html"
+  blog.sources = "{category}/{title}.html"
 end
 
 activate :bootstrap_navbar
