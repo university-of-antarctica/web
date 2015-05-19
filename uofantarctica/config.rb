@@ -48,7 +48,13 @@ activate :deploy do |deploy|
 end
 
 activate :blog do |blog|
+  blog.name = "blog"
   blog.prefix = "blog"
+end
+
+activate :blog do |blog|
+  blog.name = "projects"
+  blog.prefix = "projects"
 end
 
 activate :bootstrap_navbar
