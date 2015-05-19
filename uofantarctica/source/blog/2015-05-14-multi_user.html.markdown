@@ -4,8 +4,6 @@ date: 2015-05-14 02:19 UTC
 tags: 
 ---
 
-## Getting my Linux Machine Properly Permiss-ed 
-
 I am getting to the point now where I need to share my homeserver with others for development (Most notably [Pettr](https://hub.jazz.net/project/gpwclark/pettr/overview)). So, I'm biting the bullet and mucking around with file permissions, user groups, etc... also because I'm tired of remembering to type sudo all the time.  
  
  
