@@ -41,11 +41,51 @@
   end
 
 
+# To deploy to Zubchatyy using Rsync
 
-activate :deploy do |deploy|
-  deploy.method = :git
-  deploy.build_before = true
+# user = ENV["USER"]
+# activate :deploy do |deploy|
+#   deploy.build_before = true
+
+#   deploy.method = :rsync
+#   deploy.host   = 'www.uofantarctica.com'
+#   deploy.path   = '/var/www/html'
+#   # Optional Settings
+#   deploy.user  = user # no default
+#   # deploy.port  = 5309 # ssh port, default: 22
+#   # deploy.clean = true # remove orphaned files on remote host, default: false
+#   # deploy.flags = '-rltgoDvzO --no-p --del' # add custom flags, default: -avz
+# end
+
+
+# # To deploy to gh-pages
+# activate :deploy do |deploy|
+#   deploy.method = :git
+#   deploy.build_before = true
+# end
+
+
+
+case ENV['TARGET'].to_s.downcase
+
+  when 'github'
+    activate :deploy do |deploy|
+      deploy.method = :git
+      # deploy.build_before = true
+    end
+
+  when 'zubchatyy'
+    user = ENV["USER"]
+    activate :deploy do |deploy|
+      # deploy.build_before = true
+      deploy.method = :rsync
+      deploy.host   = 'www.uofantarctica.com'
+      deploy.path   = '/var/www/html'
+      deploy.user  = user
+    end
 end
+
+
 
 activate :blog do |blog|
   blog.name = "blog"
@@ -96,6 +136,10 @@ configure :build do
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
 end
+
+# after_build do
+#     `chmod -R a+r build`
+# end
 
 
 sprockets.import_asset 'jquery'

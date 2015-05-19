@@ -1,0 +1,13 @@
+namespace :deploy do
+  def deploy()
+    puts "Deploying everywhere"
+    system "bundle exec middleman build"
+    system "TARGET=github bundle exec middleman deploy"
+    system "TARGET=zubchatyy bundle exec middleman deploy"
+  end
+
+  task :all do
+    deploy 
+  end
+
+end
