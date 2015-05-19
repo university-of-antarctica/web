@@ -8,7 +8,7 @@ layout: projects_layout
 ---
 
  
-<img class="img-circle" src="/images/snowduino.jpg" alt="Snowduino">
+<img class="img-circle" src='<%=url_for("/images/snowduino.jpg")%>' alt="<%= current_page.data.title %>">
 <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
 GET requests to control what is displayed on the banner.</p>
 READMORE
