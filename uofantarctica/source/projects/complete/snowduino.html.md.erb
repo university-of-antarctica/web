@@ -13,28 +13,91 @@ layout: projects_layout
 GET requests to control what is displayed on the banner.</p>
 READMORE
 
+<br>
+<div class="text-info">
+  <b>Try interacting with our setup!</b> <br>
+  &nbsp; First, type a message into the box.
+  Then, hit <kbd>Enter</kbd> or press the Submit button to send it to Snowduino. <br>
+  &nbsp; The message should then appear scrolling across the LEDs. <br>
+  &nbsp;<em>You may click on the video feed to zoom in and get a closer view!</em>
+</div>
 
-<form id="snowduino_form" action="">
-  Message: <input id="snowduino_message" type="text" name="msg"><br>
-  <!-- speed: <input type="text" name="speed"><br> -->
-</form>
-<button> Submit </button>
+<div class="col-md-6">
+  <form id="snowduino_form" action="">
+    Message: <input id="snowduino_message" type="text" name="msg"><br>
+    <!-- speed: <input type="text" name="speed"><br> -->
+  </form>
+</div>
+<div class="col-md-6">
+  <div id="sendAlert" class="alert alert-success fade"> Message Sent! </div>
+</div>
+<button id="snowduino_button"> Submit to Snowduino! </button>
 
-<div class="well" id="elfotis_div">
-  <div class="embed-responsive embed-responsive-16by9">
-    <iframe class="embed-responsive-item" src="http://gpwclark.net:8283/jsfs.html"></iframe>
+
+
+<div class="well elfotis" id="elfotis_div">
+  <div class="embed-responsive embed-responsive-16by9 elfotis">
+    <iframe id="elfotis_iframe" class="embed-responsive-item elfotis" src="http://gpwclark.net:8283/jsfs.html"></iframe>
   </div>
 </div>
 
 
 <script>
-  $(document).ready(function(){
-    $("button").click(function(){
-      var query_string = $("#snowduino_message").val();
-      $.ajax({
-        url: "http://www.gpwclark.net:8282/?banner="+query_string
-      });
 
+
+  // Send Banner message to Snowduino via AJAX
+  EnableSubmitButton();
+
+    function EnableSubmitButton(){
+      $(document).ready(function(){
+        $("#snowduino_button").click(function(){
+          SendAndClearSnowduinoForm();
+        });
+      });
+    }
+
+    function SendBannerMessageToSnowduino(message){
+      $.ajax({
+          url: "http://www.gpwclark.net:8282/?banner="+message
+        });
+    }
+
+    function SendAndClearSnowduinoForm(){
+      SendSnowduinoForm();
+      ClearSnowduinoForm();
+    }
+
+      function SendSnowduinoForm(){
+        var message = $("#snowduino_message").val();
+        SendBannerMessageToSnowduino(message);
+        showSendAlert();
+      }
+      
+      function ClearSnowduinoForm(){
+        $("#snowduino_message").val("");
+      }
+
+    function showSendAlert(){
+      var alert_duration_in_ms = 4000;
+      $("#sendAlert").addClass("in");
+      setTimeout(function(){
+        $("#sendAlert").removeClass("in")
+      },alert_duration_in_ms);
+    }
+
+  // Prevent default "Enter" key use on the form
+  RedefineEnterKeyBehavior("input");
+
+  function RedefineEnterKeyBehavior(selector){
+    $(document).ready(function() {
+      $(selector).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          SendAndClearSnowduinoForm();
+          return false;
+        }
+      });
     });
-  });
+  }
+
 </script>
