@@ -12,3 +12,29 @@ layout: projects_layout
 <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
 GET requests to control what is displayed on the banner.</p>
 READMORE
+
+
+<form id="snowduino_form" action="">
+  Message: <input id="snowduino_message" type="text" name="msg"><br>
+  <!-- speed: <input type="text" name="speed"><br> -->
+</form>
+<button> Submit </button>
+
+<div class="well" id="elfotis_div">
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="http://gpwclark.net:8283/jsfs.html"></iframe>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function(){
+    $("button").click(function(){
+      var query_string = $("#snowduino_message").val();
+      $.ajax({
+        url: "http://192.168.1.19:8282/?banner="+query_string
+      });
+
+    });
+  });
+</script>
