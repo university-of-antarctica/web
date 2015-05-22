@@ -63,6 +63,37 @@ body {
   background-color: wheat;
 }
 
+#inspect_button{
+
+}
+
+#virtual_snowduino_div{
+  width:330px;
+  height:185px;
+}
+
+#marquee_div{
+
+  position:relative;
+  top:1.8em;
+  left:3.3em;
+
+  width:2em;
+  height:1.2em;
+  font-size: 40px;
+  font-weight: bold;
+ 
+    background-color: black;
+  color:red;
+  white-space: nowrap;  
+  font-family: Monospace;
+}
+
+#virtual_snowduino_marquee{
+   position:relative;
+  top: -.2em;
+}
+
 .elfotis{
 }
 
