@@ -18,37 +18,30 @@ READMORE
 <div class="well">
   <div class="text-info col-md-6">
     <b>Try interacting with our setup!</b> <br>
-    &nbsp; Just type a message into the box and hit <kbd>&crarr; Enter</kbd>.<br>
+    &nbsp; Just type a message into the box and hit <kbd>&crarr;Enter</kbd>.<br>
     &nbsp; The message should then be visible scrolling across the LEDs! <br>
-    &nbsp; <em> If you can't see the real Snowduino in the video below, then check out the virtual snowduino. </em>
+    &nbsp; <em> If you can't see the real Snowduino in the video below, then check out this virtual snowduino. </em>
   </div>
 
   <div class="col-md-6">
-
     <button id="show_button" class="btn btn-info"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span> Show Virtual Snowduino</button>
-
-   <div id="virtual_snowduino_container" style="display:none;">
-     <span>
+    <div id="virtual_snowduino_container" style="display:none;">
+      <span>
         <button id="hide_button" class="btn btn-info"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span> Hide Virtual Snowduino</button>
-
-      <button id="inspect_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
-    </span>
+        <button id="inspect_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+      </span>
       <div>
-
         <div id="virtual_snowduino_div" style="background-image: url(<%=url_for("/images/snowduino_bg.jpg")%>);" > 
-
           <div id="marquee_div">
             <marquee id="virtual_snowduino_marquee" behavior="scroll" direction="left" scrollamount="9"></marquee>
           </div>
-
-          
-
         </div>
       </div>
+      <div class="text-info">
+        <em> </em>
+      </div>
+    </div>
   </div>
-
-  </div>
-
 
   <div class="row">
   </div>
