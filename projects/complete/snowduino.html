@@ -160,48 +160,118 @@
     
   
     <h1> Snowduino </h1>
-    <p><img class="img-circle" src="../../images/snowduino.jpg" alt="Snowduino" /></p>
+    <div class="well">
+<img class="img-circle" src="../../images/snowduino.jpg" alt="Snowduino" />
 <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
 GET requests to control what is displayed on the banner.</p>
+</div>
 <p></p>
 
 <p><br /></p>
-<div class="text-info">
-  <b>Try interacting with our setup!</b> <br />
-  &nbsp; First, type a message into the box.
-  Then, hit <kbd>Enter</kbd> or press the Submit button to send it to Snowduino. <br />
-  &nbsp; The message should then appear scrolling across the LEDs. <br />
-  &nbsp;<em>You may click on the video feed to zoom in and get a closer view!</em>
-</div>
-
-<div class="col-md-6">
-  <form id="snowduino_form" action="">
-    Message: <input id="snowduino_message" type="text" name="msg" /><br />
-    <!-- speed: <input type="text" name="speed"><br> -->
-  </form>
-</div>
-<div class="col-md-6">
-  <div id="sendAlert" class="alert alert-success fade"> Message Sent! </div>
-</div>
-<p><button id="snowduino_button"> Submit to Snowduino! </button></p>
-
-<div class="well elfotis" id="elfotis_div">
-  <div class="embed-responsive embed-responsive-16by9 elfotis">
-    <iframe id="elfotis_iframe" class="embed-responsive-item elfotis" src="http://gpwclark.net:8283/jsfs.html"></iframe>
+<div class="well">
+  <div class="text-info col-md-6">
+    <b>Try interacting with our setup!</b> <br />
+    &nbsp; Just type a message into the box and hit <kbd>&crarr; Enter</kbd>.<br />
+    &nbsp; The message should then be visible scrolling across the LEDs! <br />
+    &nbsp; <em> If you can't see the real Snowduino in the video below, then check out the virtual snowduino. </em>
   </div>
+
+  <div class="col-md-6">
+
+    <button id="show_button" class="btn btn-info"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span> Show Virtual Snowduino</button>
+
+   <div id="virtual_snowduino_container" style="display:none;">
+     <span>
+        <button id="hide_button" class="btn btn-info"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span> Hide Virtual Snowduino</button>
+
+      <button id="inspect_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+    </span>
+      <div>
+
+        <div id="virtual_snowduino_div" style="background-image: url(../../images/snowduino_bg.jpg);"> 
+
+          <div id="marquee_div">
+            <marquee id="virtual_snowduino_marquee" behavior="scroll" direction="left" scrollamount="9"></marquee>
+          </div>
+
+          
+
+        </div>
+      </div>
+  </div>
+
+  </div>
+
+
+  <div class="row">
+  </div>
+
+  <div>
+    <div id="sendAlert" class="alert alert-success fade"> Message Sent! </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button id="snowduino_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send</button>
+        </span>
+        <input id="snowduino_message" type="text" class="form-control" placeholder="Hello Snowduino..." />
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+  </div>
+
+  <br />
+</div>
+
+<div id="virtual_or_elfotis_div">
+
+
+  <div id="elfotis_div">
+  <div class="well" id="elfotis_div">
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="http://gpwclark.net:8283/jsfs.html"></iframe>
+  </div>
+  <div class="text-info">
+  &nbsp;<em>You may click on the video feed to zoom in and get a closer view!</em>
+  </div>
+</div>
+  </div>
+
 </div>
 
 <script>
 
+  // KeepVirtualSnowduinoUpToDate();
+  $(document).ready(function(){
 
-  // Send Banner message to Snowduino via AJAX
-  EnableSubmitButton();
+    InspectSnowduino();
+    EnableSubmitButton();
+    EnableInspectButton();
+    RedefineEnterKeyBehavior();
+    EnableToggleButton();
+
+  });
+
+    function EnableToggleButton(){
+      $("#hide_button").click(function(){
+       ToggleVirtualSnowduino();
+      });
+      $("#show_button").click(function(){
+       ToggleVirtualSnowduino();
+      });
+    }
+
+    function ToggleVirtualSnowduino(){
+      $("#show_button").toggle();
+      $("#virtual_snowduino_container").toggle();
+      // $("#elfotis_div").toggle();
+    }
 
     function EnableSubmitButton(){
-      $(document).ready(function(){
-        $("#snowduino_button").click(function(){
-          SendAndClearSnowduinoForm();
-        });
+      $("#snowduino_button").click(function(){
+        SendAndClearSnowduinoForm();
       });
     }
 
@@ -211,6 +281,32 @@ GET requests to control what is displayed on the banner.</p>
         });
     }
 
+    function KeepVirtualSnowduinoUpToDate(){
+       InspectSnowduino();
+       setTimeout(function(){
+         KeepVirtualSnowduinoUpToDate();
+       },
+       3000);
+    }
+
+    function InspectSnowduino(){
+      $.ajax({
+          url: "http://www.gpwclark.net:8282/?inspect=yes",
+          success: function(response){
+            SetVirtualSnowduino(response);
+          }
+        });
+    }
+
+    function EnableInspectButton(){
+        $("#inspect_button").click(function(){
+          InspectSnowduino();
+        });
+    }
+    function SetVirtualSnowduino(marquee){
+      $("#virtual_snowduino_marquee").html(marquee);
+
+    }
     function SendAndClearSnowduinoForm(){
       SendSnowduinoForm();
       ClearSnowduinoForm();
@@ -220,6 +316,7 @@ GET requests to control what is displayed on the banner.</p>
         var message = $("#snowduino_message").val();
         SendBannerMessageToSnowduino(message);
         showSendAlert();
+        SetVirtualSnowduino(message);
       }
       
       function ClearSnowduinoForm(){
@@ -235,17 +332,14 @@ GET requests to control what is displayed on the banner.</p>
     }
 
   // Prevent default "Enter" key use on the form
-  RedefineEnterKeyBehavior("input");
 
-  function RedefineEnterKeyBehavior(selector){
-    $(document).ready(function() {
-      $(selector).keydown(function(event){
-        if(event.keyCode == 13) {
-          event.preventDefault();
-          SendAndClearSnowduinoForm();
-          return false;
-        }
-      });
+  function RedefineEnterKeyBehavior(){
+    $("input").keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        SendAndClearSnowduinoForm();
+        return false;
+      }
     });
   }
 
