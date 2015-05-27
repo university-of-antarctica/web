@@ -1,0 +1,440 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Bootstrapping a Personal/Organizational GitHub Page with Jekyll</title>
+
+    <link href="../../../../favicon.ico" rel="icon" type="image/ico" />
+
+    <!-- Stylesheets -->
+    <link href="../../../../stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="../../../../stylesheets/all.css" rel="stylesheet" type="text/css" />
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../stylesheets/extras.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../stylesheets/offcanvas.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- Javascript -->
+    <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js" type="text/javascript"></script>
+    <script src="../../../../javascripts/offcanvas.js" type="text/javascript"></script>
+
+    <!-- Nav Bar Selection -->
+    <script>
+      $(document).ready(function(){
+        $("#").addClass("active");
+      });
+    </script>
+
+    <!-- Background Selection -->
+    <script>
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
+
+      function SelectRandomBackgroundImageURL(){
+         var images = ['01.jpg', '02.jpg', '03.jpg', 
+            '04.jpg', '05.jpg', '06.jpg'];
+
+            var chosen_image_name = images[
+              Math.floor(
+                Math.random() * images.length
+              )
+            ];
+
+            // I have to use a URL to an actual resource
+            // in order to get this relative URL to work properly
+            // Ideally I could just get the URL to the directory
+            // So I'll get the URL to this resource and then delete the last
+            // few characters to get the relative URL to the directory...
+            var specific_image_url = '../../../../images/backgrounds/blue.jpg';
+            var image_directory_url = DirectoryURLFromFileURL(specific_image_url);
+
+            var chosen_image_url = image_directory_url + chosen_image_name;
+            return chosen_image_url;
+      }
+
+      function DirectoryURLFromFileURL(file_url){
+         var last_slash_index = file_url.lastIndexOf("/");
+         var directory_url = file_url.substring(
+              0,last_slash_index+1);
+         return directory_url;
+      }
+
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").load(function(evt){
+            $("#background").css('opacity','1');
+          });
+      }
+    </script>
+
+  </head>
+
+  <body class="blog blog_2015 blog_2015_05 blog_2015_05_26 blog_2015_05_26_jekyll_blog">
+    <br/>
+    <br/>
+    <br/>
+    <img id="background" src="../../../../images/background.png" />
+    <!-- left padding -->
+    <div class="col-md-2"></div>
+    <div class="container col-md-8 well">
+    
+      <!-- nav bar -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="well"> 
+            <div class="container-fluid">
+              <div class="row">
+                  <div class="col-sm-2" id="header_image">
+                    <img class="img-rounded" width="65px" src="../../../../images/UANT_logo.jpg" />
+                  </div>
+                  <div class="col-sm-10" id="header_text">
+                    <h3 id="header_title"><tt> The University of Antarctica </tt></h3>
+                    <small id="header_subtitle">A place as real as it is cold, honest. </small>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+              <li id="navbar-home">
+                <a href="../../../../">Home</a></li>
+
+              <li id="navbar-blog">
+                <a href="../../../">Message From the Chancellors</a></li>
+
+              <li id="navbar-academics">
+                 <a href="../../../../academics.html">Academics</a></li>
+
+              <li id="navbar-athletics">
+                 <a href="../../../../athletics.html">Athletics</a></li>
+
+              <li id="navbar-clubs">
+                 <a href="../../../../clubs.html">Clubs</a></li>
+
+              <li id="navbar-aboutuniversity">
+                 <a href="../../../../aboutuniversity.html">About UANT</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="intro">Intro</h2>
+<p>Jekyll is a great ruby-based static site generation tool. It is especially
+useful because GitHub pages uses Jekyll by default. GitHub actually allows
+its users to host static sites for themselves, their organizations, or their
+projects. We are going to focus on personal sites. Everyone can get a personal
+site, the url is "githubuser.github.io". Jekyll users have an upperhand here 
+because GitHub will automatically compile your site for you. This is an easy
+and desirable solution, especially since Jekyll is a great tool.</p>
+
+<h3 id="setup">Setup</h3>
+<p>First install jekyll: <a href="http://jekyllrb.com/docs/installation/">http://jekyllrb.com/docs/installation/</a>.</p>
+
+<p>Then:
+<code>
+$ jekyll new myblog
+$ cd myblog
+</code></p>
+
+<p>If you run the command:
+```
+tree ./ # you will see…</p>
+
+<p>./
+├── about.md
+├── _config.yml
+├── css
+│   └── main.scss
+├── feed.xml
+├── _includes
+│   ├── footer.html
+│   ├── header.html
+│   └── head.html
+├── index.html
+├── _layouts
+│   ├── default.html
+│   ├── page.html
+│   └── post.html
+├── LICENSE
+├── _posts
+│   └── 2015-05-26-welcome-to-jekyll.markdown
+├── README.md
+└── _sass
+    ├── _base.scss
+        ├── _layout.scss
+            └── _syntax-highlighting.scss</p>
+
+<p>```</p>
+
+<h3 id="getting-to-know-jekyll">Getting to know jekyll</h3>
+<p>There are two folders you need to pay particular attention to:
+*  _includes
+* _layouts</p>
+
+<p>Jekyll is just a text transformation engine. It looks for .html and .md files 
+that are in the root directory/user created directory, it then applies a layout
+, and can directly include text from any file in the _includes directory. The 
+output, by default, goes into the _site directory (created when the site is
+built). The _site directory has the same directory structure as the jekyll
+directory itself, minus all of the files prepended with an underscore.
+To understand the text transformation powers of jekyll run:</p>
+
+<p>```
+jekyll build #this compiles your site as it is to the _site directory
+tree _site</p>
+
+<p>_site
+├── about
+│   └── index.html
+├── css
+│   └── main.css
+├── feed.xml
+├── index.html
+├── jekyll
+│   └── update
+│       └── 2015
+│           └── 05
+│               └── 26
+│                   └── welcome-to-jekyll.html
+├── LICENSE
+└── README.md
+```</p>
+
+<p>As you can see every non-underlined file and folder appeared in the _site
+directory. Understanding what happened to index.html and about.md will
+fully explain how jekyll works. Jekyll starts with a layout. The default
+layout is simple:</p>
+
+<p>```
+&lt;!DOCTYPE html&gt;</p>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>
+
+<p>```
+As you can see 2 important jekyll things are being done here.</p>
+
+<ul>
+  <li>The include syntax with '{' and '%' above looks for files in the _includes 
+directory. The three files it includes are head.html, header.html, and 
+footer.html. The text of these files is included inline.
+These three files are the core of what keeps your site's look 
+consistent, they are three of the files we will be adding bootstrap code to,
+and it is natural they will be included in any file with the "default" layout.</li>
+  <li>The double curly brace syntax around the text "content" is where jekyll
+sticks the body of the file it is transforming.</li>
+</ul>
+
+<p>This means that the index.html in the root directory was transformed, into an
+.html file that looks just like default.html, but with all of the text from
+the three files in the include statements, as well as the body of the raw
+or un-transformed index.html file where the content tag is located.</p>
+
+<p>By default the index.html file looks like
+this:</p>
+
+<h2 id="section">```</h2>
+<p>layout: default
+—</p>
+
+<div class="home">
+
+  <h1 class="page-heading">Posts</h1>
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe">subscribe &lt;a href="{{ "/feed.xml" | prepend: site.baseurl }}"&gt;via RSS</p>
+
+</div>
+
+<p>```</p>
+
+<p>This raw or un-transformed .html file that lives in the root of the jekyll 
+directory is what appears in the content tag of the default.html. The only
+missing link is the syntax in the first three lines. Jekyll calls everything
+between the triple —- as frontmatter. A file with frontmatter indicates
+that some transformations need to be applied before the file is done. The
+frontmatter in index.html just says 'layout: default'. There are many 
+possible values that frontmatter can take on 
+(<a href="http://jekyllrb.com/docs/frontmatter/">see the docs</a>). 'layout' is an
+important variable to set in frontmatter because it specifies what file
+should serve as the template or layout from the _layouts folder. This of 
+course means that the value of the layout frontmatter variable must
+correspond to the name of a file in the _layouts directory.</p>
+
+<h3 id="pages-and-posts">Pages and posts</h3>
+
+<p>Jekyll is built for blogging, so talking about posts is important and of course
+very easy to understand, but pages are also important in sites, and jekyll
+does those well too.</p>
+
+<h4 id="pages">Pages</h4>
+<p>In the default jekyll directory, there is also an about.md file. In the
+transformation (pictured above), this about.md file turned into:
+<code>
+├── about
+│   └── index.html
+</code>
+—
+layout: page
+title: About
+permalink: /about/
+—</p>
+
+<p>This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at
+<a href="http://jekyllrb.com/">jekyllrb.com</a></p>
+
+<p>You can find the source code for the Jekyll new theme at: <a href="https://github.com/jglovier/jekyll-new">github.com/jglovier/jekyll-new</a></p>
+
+<p>You can find the source code for Jekyll at <a href="https://github.com/jekyll/jekyll">github.com/jekyll/jekyll</a>
+```</p>
+
+<p>There are three frontmatter variables here. The last two are easy to explain,
+'title' is the page title, it can be referenced by a variable, 
+(<a href="http://jekyllrb.com/docs/variables/">see the docs</a>), and 'permalink' is what
+specifies the behavior of the transformed file. about.md was in the root directory
+but it becomes /about/index.html because of the permalink variable.
+The 'layout' frontmatter variable here is 'page' this is interesting because of 
+the contents of page:
+```
+—
+layout: default
+—</p>
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title }}</h1>
+  </header>
+
+  <article class="post-content">
+    {{ content }}
+  </article>
+
+</div>
+<p>```</p>
+
+<p>This file, page.html, is itself a layout. It is different from default.html 
+because it has frontmatter. This means that Jekyll supports nested layouts.
+You can define default.html to be the barebones html that all of your html
+files need, then you can define pages or groups of pages, that have some 
+additional html specific to their type, and as long as they include the 
+frontmatter variable 'layout' set to default, they will appear consistently.</p>
+
+<h4 id="posts">Posts</h4>
+<p>Jekyll is designed to handle posts so it is very much a 'solved' problem.
+All posts go into the _posts folder. Post files are named
+YEAR-MONTH-DAY-title.markdown. They must also include frontmatter, followed
+by the markdown that serves as the body of the post:
+<code>
+---
+layout: post
+title:  "Welcome to Jekyll!"
+date:   2015-05-26 20:45:48
+categories: jekyll update
+---
+You’ll find this post in your `_posts` directory.
+...
+...
+</code></p>
+
+<p>Since it is explained so well I must defer to 
+<a href="http://jekyllrb.com/docs/posts/">Jekyll's documentation</a>
+for all post related questions. I will know focus on
+building a very basic site.</p>
+
+<h3 id="jekyll-and-twitter-bootstrap">Jekyll and Twitter Bootstrap</h3>
+<p>Twitter Bootstrap is a very easy to use library that allows for very
+intuitive and pretty websites to be built with minimal effort. To use
+the library we need to edit the head.html file in the _includes directory.
+It goes in the head.html directory because we are going to stick with the
+default.html layout as the base for our site. Given this, we need all of the
+bootstrap files to be available on every page. The bootstrap site we are going
+to build will have a home page, an about page, and a page that lists all of
+the blog posts from your _posts folder. To navigate between those pages, we 
+will use a navbar.</p>
+
+<p>First we need to add the following to _includes/head.html:
+```
+  <script src="http://code.jquery.com/jquery.min.js"></script></p>
+<link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+<script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
+
+<p>```</p>
+
+<p>This ensures that all of the css/js we need for bootstrap will be available to us.
+The rest of the work I did for you.
+<code>
+git clone https://github.com/gpwclark/user.github.io
+</code></p>
+
+<p>If you run jekyll serve in that directory you will see the basic site we were
+building up to. The head.html, header.html, and footer.html have some default
+bootstrap code in them. Most importantly, header.html has the code for the
+navbar. The navbar has three links, home, about, and blog. These correspond to
+index.html, about.md, and blog.md in the root directory. The index.html file
+has some more baked in bootstrap code, and the blog.md file uses a feature
+of Liquid, the templating engine Jekyll uses, to list all of the posts,
+currently, just the intro post.</p>
+
+<p>This repo is good enough to serve as a base for your personal page. Create a
+repo named yourghusername.github.io and copy the contents of user.github.io
+in there. When you commit the changes, GitHub will build it for you and host
+it at yourghusername.github,io.</p>
+
+<p>Make sure to reference the <a href="http://jekyllrb.com/">Jekyll site</a> to fill in the
+rest of the gaps in your knowledge about Jekyll. Twitter also has
+<a href="http://getbootstrap.com/">great documentation</a>.</p>
+
+
+    </div> <!-- end container -->  
+    <!-- right padding -->
+    <div class="col-md-2"></div> 
+  </body>
+</html>
