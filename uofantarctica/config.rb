@@ -143,3 +143,7 @@ end
 
 
 sprockets.import_asset 'jquery'
+
+#Set the markdown engine as redcarpet to use GitHub Flavored Markdown
+set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true
+set :markdown_engine, :redcarpet

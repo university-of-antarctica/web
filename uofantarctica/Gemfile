@@ -21,3 +21,6 @@ gem "tzinfo-data", platforms: [:mswin, :mingw, :jruby]
 
 #blog dependencies
 gem "nokogiri"
+
+#syntax highlighting
+gem "redcarpet"
