@@ -18,14 +18,20 @@ blog: blog
   
   <% blog.articles[0...5].each do |article| %>
     <article>
+
       <h2>
-        <a href="<%= article.url %>"><%= article.title %></a>
+        <!--For some reason article.path returns blog/articlename.html
+            So we need to prepend a slash to get the absolute path and
+            then get the url_for that to convert it from the source path
+            to the build path.  -->
+        <%= link_to article.title, url_for('/'+article.path) %>
         <time><%= article.date.strftime('%b %e %Y') %></time>
       </h2>
 
+
       <%= article.summary %>
 
-      <a href="<%= article.url %>">Read more</a>
+      <a href="<%=url_for('/'+article.path) %>">Read more</a>
     </article>
   <% end %>
 
