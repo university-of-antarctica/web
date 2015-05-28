@@ -165,7 +165,18 @@
 
 <p></p>
 
-<div>
+<div id="virtual_or_elfotis_div" class="well">
+
+  <div id="elfotis_error" class="alert alert-danger" style="display:none;"> 
+    <em> Sorry! The Elf On the Ice Shelf is sleeping... Check out some of our other projects! </em> 
+  </div>
+
+  <div id="elfotis_loading" class="alert alert-info">
+    <em> Trying to connect to the Elf on the Ice Shelf ... </em>
+  </div>
+
+  <div id="elfotis_div" style="display:none;">
+    <div>
   <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="http://gpwclark.net:8283/jsfs.html"></iframe>
   </div>
@@ -173,6 +184,38 @@
   &nbsp;<em>You may click on the video feed to zoom in and get a closer view!</em>
   </div>
 </div>
+
+<p></div></p>
+
+<p></div></p>
+
+<script>
+  $(document).ready(function(){
+    TestElfotis();
+  });
+
+  function TestElfotis(){
+     $.ajax({
+      url: "http://www.gpwclark.net:8283/jsfs.html",
+      success: function(response){
+        HideElfotisLoadingText();
+      },
+      error: function(xhr, status, error){
+        ShowElfotisErrorText();
+        HideElfotisLoadingText();
+      }
+    });
+  }
+
+  function HideElfotisLoadingText(){
+    $("#elfotis_loading").hide();
+  }
+
+  function ShowElfotisErrorText(){
+    $("#elfotis_error").show();
+  }
+
+</script>
 
 <p><br>
 <br>
