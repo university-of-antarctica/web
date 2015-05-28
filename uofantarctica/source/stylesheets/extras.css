@@ -47,12 +47,36 @@ body {
 }
 
 .carousel-inner{
-  width: 400px;
-  height: 400px;
+  width: 340px;
+  height: 340px;
+  position:relative;
+}
+.carousel-inner .item img{
+  height:340px;
+  width:340px;
+}
+
+.carousel-inner .item{
+  position:absolute;
+  top:0;
+  height:340px;
+  width:400px;
+}
+
+#carousel_container{
+  width: 380px;
+  height: 380px;
+  background-color:wheat;
+}
+#caption_container{
+  margin:10px 10px;
+  position:absolute;
+  top:0;
+  z-index:2;
 }
 
 .carousel-caption{
-  top:50%;
+  display:none;
 }
 
 #geohack_div{

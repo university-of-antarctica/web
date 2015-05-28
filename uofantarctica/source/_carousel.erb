@@ -1,43 +1,94 @@
 <!-- Script to Start Carousel -->
 <script>
- $(document).ready(function(){
-  $('.carousel').carousel();
- });
+  $(document).ready(function(){
+    $('.carousel').carousel();
+    SetCaption(GetCurrentSlideCaption());
+
+    // This triggers before each slide change
+    $('#myCarousel').on('slide.bs.carousel', function (event) {
+
+      $('#caption_container').removeClass('in');
+
+    });
+
+    // This triggers after each slide change
+    $('#myCarousel').on('slid.bs.carousel', function (event) {
+      
+      SetCaption(GetCurrentSlideCaption());
+      $('#caption_container').addClass('in');
+
+    });
+
+    function GetCurrentSlideCaption(){
+      var caption_text=$('#myCarousel .item.active .carousel-caption').html();
+      return caption_text;
+    }
+    function SetCaption(new_caption){
+      $("#caption_container").html(new_caption);
+    }
+
+  });
+
+
 </script>
 
 <!-- Carousel -->
-<div id="carouselContainer" class="well">
-  <div id="myCarousel" class="carousel slide"><!-- class of slide 
-    for animation -->
+<div id="carousel_container" class="well">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
     <div class="carousel-inner">
+      <div id="caption_container" class="alert alert-info fade in">
+
+
+      </div>
       <div class="item active">
       <!-- class of active since it is the first item -->
-        <%= image_tag("steven.jpg") %>
-        <div class="carousel-caption">
-          <p>Can you believe this guy?</p>
+        <a href='<%=url_for("/projects/complete/snowduino.html")%>'>
+          <img src='<%=url_for("/images/snowduino.jpg")%>'>
+        </a>
+        <div class="carousel-caption well" >
+          Try out our Snowduino Demo!
+          Leave us a scrolling message in the lab.
         </div>
       </div>
       <div class="item">
-        <%= image_tag("steven1.jpg") %>
-        <div class="carousel-caption">
-          <p>Just look at him</p>
+        <a href='<%=url_for("/projects/complete/elfotis.html")%>'>
+          <img src='<%=url_for("/images/elf.jpg")%>'>
+        </a>
+        <div class="carousel-caption well">
+          <p>Check out our lab webcam!</p>
         </div>
       </div>
       <div class="item">
-        <%= image_tag("steven2.jpg") %>
-        <div class="carousel-caption">
-          <p>Does he ever even get his haircut?!?!</p>
+        <a href='<%=url_for("/blog/index.html")%>'>
+          <img src='<%=url_for("/images/UANT_logo.jpg")%>'>
+        </a>
+        <div class="carousel-caption well">
+          <p>Read our blog!</p>
         </div>
       </div>
     </div><!-- /.carousel-inner -->
+
     <!--  Next and Previous controls below
           href values must reference the id for this carousel -->
-      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+
+        <!-- Left and right controls -->
+  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+    
   </div><!-- /.carousel -->
+
 </div><!-- /#carouselContainer -->  
+
