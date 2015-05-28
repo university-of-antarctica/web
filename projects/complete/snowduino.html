@@ -160,37 +160,36 @@
     
   
     <h1> Snowduino </h1>
-    <div class="well">
-<img class="img-circle" src="../../images/snowduino.jpg" alt="Snowduino" />
+    <p><div class="well">
+<img class="img-circle" src='../../images/snowduino.jpg' alt="Snowduino">
 <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
 GET requests to control what is displayed on the banner.</p>
 </div>
-<p></p>
+</p>
 
-<p><br /></p>
+<p><br>
 <div class="well">
   <div class="text-info">
-    <b>Try interacting with our setup!</b> <br />
-    &nbsp; Just type a message into the box and hit <kbd>&crarr;Enter</kbd>.<br />
-    &nbsp; The message should then be visible scrolling across the LEDs! <br />
+    <b>Try interacting with our setup!</b> <br>
+    &nbsp; Just type a message into the box and hit <kbd>&crarr;Enter</kbd>.<br>
+    &nbsp; The message should then be visible scrolling across the LEDs! <br>
     &nbsp; You can watch it in our lab via webcam, or a virtual Snowduino.
-  </div>
+  </div></p>
 
-
-  <div class="row">
+<p><div class="row">
     <div class="col-lg-6">
       <div class="input-group">
         <span class="input-group-btn">
           <button id="snowduino_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send</button>
         </span>
-        <input id="snowduino_message" type="text" class="form-control" placeholder="Hello Snowduino..." />
-      </div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
+        <input id="snowduino_message" type="text" class="form-control" placeholder="Hello Snowduino...">
+      </div>&lt;!-- /input-group --&gt;
+    </div>&lt;!-- /.col-lg-6 --&gt;
     <div class="col-lg-6">
       <div id="sendAlert" class="alert alert-success fade"> Message Sent! </div>
     </div>
   </div>
-</div>
+</div></p>
 
 <div id="snowduino_controls">
  
@@ -207,7 +206,7 @@ GET requests to control what is displayed on the banner.</p>
 
 </div>
 
-<p><br /></p>
+<p><br></p>
 
 <div id="virtual_or_elfotis_div" class="well">
 
@@ -229,7 +228,7 @@ GET requests to control what is displayed on the banner.</p>
   <div id="virtual_snowduino_div" style="display:none;">
     <div>
   <div>
-    <div id="virtual_snowduino_div" style="background-image: url(../../images/snowduino_bg.jpg);"> 
+    <div id="virtual_snowduino_div" style="background-image: url(../../images/snowduino_bg.jpg);" > 
       <div id="marquee_div">
         <marquee id="virtual_snowduino_marquee" behavior="scroll" direction="left" scrollamount="9"></marquee>
       </div>
@@ -239,9 +238,10 @@ GET requests to control what is displayed on the banner.</p>
     <em> </em>
   </div>
 </div>
-  </div>
 
-  <div id="elfotis_div" style="display:none;">
+<p></div></p>
+
+<p><div id="elfotis_div" style="display:none;">
     <div>
   <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="http://gpwclark.net:8283/jsfs.html"></iframe>
@@ -250,9 +250,9 @@ GET requests to control what is displayed on the banner.</p>
   &nbsp;<em>You may click on the video feed to zoom in and get a closer view!</em>
   </div>
 </div>
-  </div>
+  </div></p>
 
-</div>
+<p></div></p>
 
 <script>
 
@@ -459,7 +459,6 @@ GET requests to control what is displayed on the banner.</p>
   }
 
 </script>
-
 
 
   </div>
