@@ -4,6 +4,7 @@ date: 2015-05-27 19:01 UTC
 tags:
 ---
 
+
 ## Overview
 
 I created a git repository, [https://github.com/gpwclark/user.github.io](https://github.com/gpwclark/user.github.io), that is a bootstrap based static site made with jekyll. This project is meant to serve as a template for the creation of any 'your-gh-username.github.io' project page. Below I talk a bit about [jekyll](http://jekyllrb.com/), what it does, and what I did to make this project work with [bootstrap](http://getbootstrap.com/).
