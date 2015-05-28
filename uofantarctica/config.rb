@@ -82,6 +82,9 @@ case ENV['TARGET'].to_s.downcase
       deploy.host   = 'www.uofantarctica.com'
       deploy.path   = '/var/www/html'
       deploy.user  = user
+      deploy.flags = '-avz --no-perms --no-owner --no-group'
+      # add flag --delete to delete files that are in the target that aren't in the source
+       # add custom flags, default: -avz
     end
 end
 
