@@ -10,18 +10,108 @@
     });
   </script>
 
-  <div class="row row-offcanvas row-offcanvas-right">
-    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
-      <div class="list-group">
-        <%= link_to 'Our Projects', url_for('/projects/index.html'), {:class=>"list-group-item"} %>
-        <%= link_to 'GitHub', 'https://github.com/university-of-antarctica', {:class=>"list-group-item"} %>
-        <%= link_to 'About Us',    url_for('/aboutus.html'), {:class=>"list-group-item"} %>
-      </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-9">
-    <%= yield %>
-    </div>
+
+<div>
+  <div class="col-md-2">
+
+
+
+
+    <ul class="nav nav-pills nav-stacked sidebar">
+
+      <h3>
+        <span class="label label-primary">Our Projects
+        </span>
+      </h3>
+
+      <li role="presentation">
+        <a href="<%=url_for('/projects/index.html') %> ">
+          Overview
+        </a>
+      </li>
+    
+      <li role="presentation">
+        <a href="<%=url_for('/projects/complete/snowduino.html') %> ">
+          Snowduino
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/projects/complete/elf.html') %> ">
+          Elf On The Ice Shelf
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/projects/complete/icegammon.html') %> ">
+          Icegammon
+        </a>
+      </li>
+     
+      <h3>
+        <span class="label label-primary">
+          About Us
+        </span>
+      </h3>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          FAQs
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          The Authors
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          Our Mission
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          Our Equipment
+        </a>
+      </li>
+
+
+      <h3>
+        <span class="label label-primary">Helpful Links
+        </span>
+      </h3>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          Link One
+        </a>
+      </li>
+
+      <li role="presentation">
+        <a href="<%=url_for('/aboutus.html') %> ">
+          Link Two
+        </a>
+      </li>
+
+    </ul>
+
+
+
+
+
+
+
+
 
   </div>
+
+  <div class="col-md-10">
+    <%= yield %>
+  </div>
+
+</div>
 <% end %>

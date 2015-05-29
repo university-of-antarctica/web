@@ -129,3 +129,17 @@ body {
 #header_subtitle {
   color: grey;
 }
+
+.sidebar > li{
+ /* border-:1px solid gray;*/
+  border-bottom: 1px solid gray;
+}
+
+.sidebar_header{
+  background-color:lightblue;
+}
+
+.nav > li.sidebar_header > a:hover{
+  background-color:inherit;
+  color:#337ab7;
+}
