@@ -8,15 +8,30 @@
         $('.row-offcanvas').toggleClass('active')
       });
     });
+
+    <!-- Side Bar Selection -->
+    $(document).ready(function(){
+      if(ThereExistsSidebarSelectionFrontmatter){
+        $("#" + GetSidebarSelectionFrontmatter() + ">a")
+        .append(
+          "<span class='glyphicon glyphicon-star' aria-hidden='true'></span>"
+        );
+      }
+    });
+    
+    function GetSidebarSelectionFrontmatter(){
+      return '<%=current_page.data.active_sidebar_tab%>'
+    }
+    function ThereExistsSidebarSelectionFrontmatter(){
+      return GetSidebarSelectionFrontmatter().length > 0;
+    }
+
   </script>
 
 
 
 <div>
   <div class="col-md-2">
-
-
-
 
     <ul class="nav nav-pills nav-stacked sidebar">
 
@@ -25,25 +40,25 @@
         </span>
       </h3>
 
-      <li role="presentation">
+      <li id="sidebar_projects" role="presentation">
         <a href="<%=url_for('/projects/index.html') %> ">
-          Overview
+          All Projects
         </a>
       </li>
     
-      <li role="presentation">
+      <li id="sidebar_snowduino" role="presentation">
         <a href="<%=url_for('/projects/complete/snowduino.html') %> ">
           Snowduino
         </a>
       </li>
 
-      <li role="presentation">
+      <li id="sidebar_elfotis" role="presentation">
         <a href="<%=url_for('/projects/complete/elf.html') %> ">
           Elf On The Ice Shelf
         </a>
       </li>
 
-      <li role="presentation">
+      <li id="sidebar_icegammon" role="presentation">
         <a href="<%=url_for('/projects/complete/icegammon.html') %> ">
           Icegammon
         </a>
@@ -55,26 +70,26 @@
         </span>
       </h3>
 
-      <li role="presentation">
-        <a href="<%=url_for('/aboutus.html') %> ">
+      <li role="presentation" class="sidebar_disabled">
+        <a>
           FAQs
         </a>
       </li>
 
-      <li role="presentation">
+      <li id="sidebar_aboutus" role="presentation">
         <a href="<%=url_for('/aboutus.html') %> ">
           The Authors
         </a>
       </li>
 
-      <li role="presentation">
-        <a href="<%=url_for('/aboutus.html') %> ">
+      <li role="presentation" class="sidebar_disabled">
+        <a>
           Our Mission
         </a>
       </li>
 
-      <li role="presentation">
-        <a href="<%=url_for('/aboutus.html') %> ">
+      <li role="presentation" class="sidebar_disabled">
+        <a>
           Our Equipment
         </a>
       </li>
@@ -85,27 +100,19 @@
         </span>
       </h3>
 
-      <li role="presentation">
-        <a href="<%=url_for('/aboutus.html') %> ">
+      <li role="presentation" class="sidebar_disabled">
+        <a>
           Link One
         </a>
       </li>
 
-      <li role="presentation">
-        <a href="<%=url_for('/aboutus.html') %> ">
+      <li role="presentation" class="sidebar_disabled">
+        <a>
           Link Two
         </a>
       </li>
 
     </ul>
-
-
-
-
-
-
-
-
 
   </div>
 
