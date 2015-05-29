@@ -7,63 +7,64 @@ category: complete
 layout: projects_layout
 ---
 
- <div class="well">
-<img class="img-circle" src='<%=url_for("/images/snowduino.jpg")%>' alt="<%= current_page.data.title %>">
-<p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets 
-GET requests to control what is displayed on the banner.</p>
+<div class="well">
+  <img class="img-circle" src='<%=url_for("/images/snowduino.jpg")%>' alt="<%= current_page.data.title %>">
+  <p>An arduino uno controls two 8x8 LED matrices.  A banner of scrolling text is displayed on the matrices, comprised of 5x7 characters.  An ethernet shield on the arduino hosts a web server which interprets GET requests to control what is displayed on the banner.</p>
 </div>
+
 READMORE
 
 <br>
-<div class="well">
-  <div class="text-info">
-    <b>Try interacting with our setup!</b> <br>
-    &nbsp; Just type a message into the box and hit <kbd>&crarr;Enter</kbd>.<br>
-    &nbsp; The message should then be visible scrolling across the LEDs! <br>
+<div class="well" style="overflow:hidden;">
+  <div class="text-info" >
+    <b>Try interacting with our setup!</b>
+    <br>
+    &nbsp; Just type a message into the box and hit 
+    <kbd>&crarr;Enter</kbd>.
+    <br>
+    &nbsp; The message should then be visible scrolling across the LEDs!
+    <br>
     &nbsp; You can watch it in our lab via webcam, or a virtual Snowduino.
   </div>
-
-
-  <div class="row">
-    <div class="col-lg-6">
+  <div>
+    <div class="col-lg-6" >
       <div class="input-group">
         <span class="input-group-btn">
-          <button id="snowduino_button" class="btn btn-info" type="button"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send</button>
+          <button id="snowduino_button" class="btn btn-info" type="button">
+            <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Send
+          </button>
         </span>
         <input id="snowduino_message" type="text" class="form-control" placeholder="Hello Snowduino...">
       </div>
     </div>
     <div class="col-lg-6">
-      <div id="sendAlert" class="alert alert-success fade"> Message Sent! </div>
+       <div id="sendToSnowduinoNotifier" class="alert alert-info fade">placeholder</div>
     </div>
   </div>
 </div>
-
 <div id="snowduino_controls">
- 
- <span>
-
-   <button id="show_button" class="btn btn-info"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span> Show Virtual Snowduino</button>
-   
-  <button id="hide_button" class="btn btn-info" style="display:none;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span> Hide Virtual Snowduino</button>
-
-  <button id="inspect_button" class="btn btn-info" type="button" style="display:none;"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
-
+  <span>
+    <button id="show_button" class="btn btn-info">
+      <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span> Show Virtual Snowduino
+    </button>
+    <button id="hide_button" class="btn btn-info" style="display:none;">
+      <span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span> Hide Virtual Snowduino
+    </button>
+    <button id="inspect_button" class="btn btn-info" type="button" style="display:none;">
+      <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh
+    </button>
   </span>
-
-
 </div>
-
 <br>
-
 <div id="virtual_or_elfotis_div" class="well">
-
-   <div id="error_messages">
-     <div id="elfotis_error" class="alert alert-danger" style="display:none;"> <em> The Elf On the Ice Shelf is sleeping, so you'll have to settle for the virtual snowduino </em> </div>
-
-     <div id="snowduino_error" class="alert alert-danger" style="display:none;"> <em> Snowduino appears to be down right now, check back later! </em> </div>
+  <div id="error_messages">
+    <div id="elfotis_error" class="alert alert-danger" style="display:none;">
+      <em> The Elf On the Ice Shelf is sleeping, so you'll have to settle for the virtual snowduino </em>
+    </div>
+    <div id="snowduino_error" class="alert alert-danger" style="display:none">
+      <em> Snowduino appears to be down right now, check back later! </em>
+    </div>
   </div>
-
   <div id="loading_messages">
     <div id="elfotis_loading" class="alert alert-info">
       <em> Trying to connect to the Elf on the Ice Shelf ... </em>
@@ -72,20 +73,16 @@ READMORE
       <em> Trying to connect to Snowduino ... </em>
     </div>
   </div>
-
   <div id="virtual_snowduino_div" style="display:none;">
     <%= partial "virtualsnowduino" %>
   </div>
-
   <div id="elfotis_div" style="display:none;">
     <%= partial "elfotis" %>
   </div>
-
 </div>
 
 
 <script>
-
   // KeepVirtualSnowduinoUpToDate();
   $(document).ready(function(){
 
@@ -179,11 +176,13 @@ READMORE
     function ShowVirtualSnowduino(){
       $("#show_button").hide();
       $("#virtual_snowduino_div").show();
+      ShowVirtualSnowduinoControls();
     }
 
     function HideVirtualSnowduino(){
       $("#show_button").show();
       $("#virtual_snowduino_div").hide();
+      HideVirtualSnowduinoControls();
     }
 
     function ShowElfotis(){
@@ -228,9 +227,20 @@ READMORE
     }
 
     function SendBannerMessageToSnowduino(message){
+      setNotifierPending();
+      // setTimeout(function(){
       $.ajax({
-          url: "http://www.gpwclark.net:8282/?banner="+message
-        });
+        url: "http://www.gpwclark.net:8282/?banner="+message,
+        success: function(response){
+          setNotifierSuccess();
+        },
+        error: function(xhr, status, error){
+          setNotifierError();
+        }
+      });
+
+      // },1000);
+
     }
 
     function KeepVirtualSnowduinoUpToDate(){
@@ -271,21 +281,40 @@ READMORE
       function SendSnowduinoForm(){
         var message = $("#snowduino_message").val();
         SendBannerMessageToSnowduino(message);
-        showSendAlert();
       }
       
       function ClearSnowduinoForm(){
         $("#snowduino_message").val("");
       }
 
-    function showSendAlert(){
-      var alert_duration_in_ms = 4000;
-      $("#sendAlert").addClass("in");
-      setTimeout(function(){
-        $("#sendAlert").removeClass("in")
-      },alert_duration_in_ms);
+    function setNotifierPending(){
+       $("#sendToSnowduinoNotifier").removeClass().addClass("alert alert-info fade")
+       $("#sendToSnowduinoNotifier").text("Sending message...");
+       fadeInOutNotifier();
+    }
+    function setNotifierSuccess(){
+       $("#sendToSnowduinoNotifier").removeClass().addClass("alert alert-success fade")
+       $("#sendToSnowduinoNotifier").text("Message sent!");
+       fadeInOutNotifier();
+    }
+    function setNotifierError(){
+       $("#sendToSnowduinoNotifier").removeClass().addClass("alert alert-danger fade");
+       $("#sendToSnowduinoNotifier").text("Failed to send to Snowduino.  Try again later.");
+       fadeInOutNotifier();
     }
 
+    function fadeInOutNotifier(){
+      
+      var alert_duration_in_ms = 4000;
+      window.clearTimeout(window.notifier_timeout_id);
+      $("#sendToSnowduinoNotifier").addClass("in");
+      console.log("fade in");
+      window.notifier_timeout_id = setTimeout(function(){
+        $("#sendToSnowduinoNotifier").removeClass("in");
+              console.log("fade out");
+      },alert_duration_in_ms);
+
+    }
   // Prevent default "Enter" key use on the form
 
   function RedefineEnterKeyBehavior(){
