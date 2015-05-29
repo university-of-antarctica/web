@@ -95,7 +95,7 @@ READMORE
     RedefineEnterKeyBehavior();
     EnableShowVirtualSnowduinoButton();
     EnableHideVirtualSnowduinoButton();
-    TestSnowduino();
+    TestSnowduino(5);
     TestElfotis();
     OnlyShowWorkingService();
 
@@ -124,18 +124,28 @@ READMORE
       });
     }
 
-    function TestSnowduino(){
+    function TestSnowduino(num_attempts_remaining){
        $.ajax({
         url: "http://www.gpwclark.net:8282/?inspect=yes",
         success: function(response){
           HideSnowduinoLoadingText();
         },
         error: function(xhr, status, error){
-          ShowSnowduinoErrorText();
-          HideSnowduinoLoadingText();
+          --num_attempts_remaining;
+          alert(num_attempts_remaining);
+
+          if(num_attempts_remaining == 0){
+            ShowSnowduinoErrorText();
+            HideSnowduinoLoadingText();
+          }
+          else{
+            TestSnowduino(num_attempts_remaining);
+          }
+
         }
       });
     }
+
 
     function TestElfotis(){
        $.ajax({
