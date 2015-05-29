@@ -233,6 +233,7 @@ READMORE
         url: "http://www.gpwclark.net:8282/?banner="+message,
         success: function(response){
           setNotifierSuccess();
+          InspectSnowduino();
         },
         error: function(xhr, status, error){
           setNotifierError();
@@ -269,13 +270,18 @@ READMORE
         });
     }
     function SetVirtualSnowduino(marquee){
-      $("#virtual_snowduino_marquee").html(marquee);
+      // <div id="marquee_div">
+      //   <marquee id="virtual_snowduino_marquee" behavior="scroll" direction="left" scrollamount="9"></marquee>
+      // </div>
 
+      $("#marquee_div").html(
+        '<marquee id="virtual_snowduino_marquee" behavior="scroll" direction="left" scrollamount="9">'+marquee+'</marquee>'
+        )
+      // $("#virtual_snowduino_marquee").text(marquee);
     }
     function SendAndClearSnowduinoForm(){
       SendSnowduinoForm();
       ClearSnowduinoForm();
-      InspectSnowduino();
     }
 
       function SendSnowduinoForm(){
