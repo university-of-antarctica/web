@@ -136,7 +136,24 @@
         </div>
       </div>
 
-      
+      <p>This page was built using the static site generator, &lt;%= link_to &#39;Middleman&#39;, &#39;<a href="https://middlemanapp.com/">https://middlemanapp.com/</a>&#39; %&gt;.  Therefore, it makes sense to go over some of what we learned in the process of getting the site up and running.</p>
+
+<ol>
+<li> Should I use Middleman?</li>
+</ol>
+
+<p>This post won&#39;t have a detailed discussion of the virtues of different static site generators.  There are &lt;%= link_to &#39;Too many generators&#39; &#39;<a href="https://staticsitegenerators.net/">https://staticsitegenerators.net/</a>&#39; %&gt; to do a proper comparison (394 at the time of writing).</p>
+
+<p>After setting up Middleman, our development cycle consists of the following steps:</p>
+
+<pre><code>a) &gt;&gt; middleman server
+b) Use a text editor to modify files in the Middleman &#39;source&#39; directory 
+c) Navigate a browser to localhost:4567 to look at the site
+d) repeat b) and c) until you are satisfied with your changes
+e) commit to git
+f) &gt;&gt; middleman deploy
+</code></pre>
+
 
     </div> <!-- end container -->  
     <!-- right padding -->

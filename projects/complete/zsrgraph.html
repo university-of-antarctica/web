@@ -1,0 +1,943 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>ZSRGraph</title>
+
+    <link href="../../favicon.ico" rel="icon" type="image/ico" />
+
+    <!-- Stylesheets -->
+    <link href="../../stylesheets/normalize.css" rel="stylesheet" type="text/css" /><link href="../../stylesheets/all.css" rel="stylesheet" type="text/css" />
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../stylesheets/extras.css" rel="stylesheet" type="text/css" />
+    <link href="../../stylesheets/offcanvas.css" rel="stylesheet" type="text/css" />
+
+
+    <!-- Javascript -->
+    <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js" type="text/javascript"></script>
+    <script src="../../javascripts/offcanvas.js" type="text/javascript"></script>
+
+    <!-- Nav Bar Selection -->
+    <script>
+      $(document).ready(function(){
+        $("#").addClass("active");
+      });
+    </script>
+
+    <!-- Background Selection -->
+    <script>
+       $(document).ready(function() {
+         var bg_img_url = SelectRandomBackgroundImageURL();
+         SetImageAsBackground(bg_img_url);
+       });
+
+      function SelectRandomBackgroundImageURL(){
+         var images = ['01.jpg', '02.jpg', '03.jpg', 
+            '04.jpg', '05.jpg', '06.jpg'];
+
+            var chosen_image_name = images[
+              Math.floor(
+                Math.random() * images.length
+              )
+            ];
+
+            // I have to use a URL to an actual resource
+            // in order to get this relative URL to work properly
+            // Ideally I could just get the URL to the directory
+            // So I'll get the URL to this resource and then delete the last
+            // few characters to get the relative URL to the directory...
+            var specific_image_url = '../../images/backgrounds/blue.jpg';
+            var image_directory_url = DirectoryURLFromFileURL(specific_image_url);
+
+            var chosen_image_url = image_directory_url + chosen_image_name;
+            return chosen_image_url;
+      }
+
+      function DirectoryURLFromFileURL(file_url){
+         var last_slash_index = file_url.lastIndexOf("/");
+         var directory_url = file_url.substring(
+              0,last_slash_index+1);
+         return directory_url;
+      }
+
+      function SetImageAsBackground(chosen_image_url){
+          $("#background").attr("src",chosen_image_url);
+          $("#background").load(function(evt){
+            $("#background").css('opacity','1');
+          });
+      }
+    </script>
+
+  </head>
+
+  <body class="projects projects_complete projects_complete_zsrgraph">
+    <br/>
+    <br/>
+    <br/>
+    <img id="background" src="../../images/background.png" />
+    <!-- left padding -->
+    <div class="col-md-2"></div>
+    <div class="container col-md-8 well">
+    
+      <!-- nav bar -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="well"> 
+            <div class="container-fluid">
+              <div class="row">
+                  <div class="col-sm-2" id="header_image">
+                    <img class="img-rounded" width="65px" src="../../images/UANT_logo.jpg" />
+                  </div>
+                  <div class="col-sm-10" id="header_text">
+                    <h3 id="header_title"><tt> The University of Antarctica </tt></h3>
+                    <small id="header_subtitle">A place as real as it is cold, honest. </small>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+              <li id="navbar-home">
+                <a href="../../">Home</a></li>
+
+              <li id="navbar-blog">
+                <a href="../../blog/">Message From the Chancellors</a></li>
+
+              <li id="navbar-academics">
+                 <a href="../../academics.html">Academics</a></li>
+
+              <li id="navbar-athletics">
+                 <a href="../../athletics.html">Athletics</a></li>
+
+              <li id="navbar-clubs">
+                 <a href="../../clubs.html">Clubs</a></li>
+
+              <li id="navbar-aboutuniversity">
+                 <a href="../../aboutuniversity.html">About UANT</a></li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      
+  <link href="css/offcanvas.css" rel="stylesheet" type="text/css" />
+
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+      });
+    });
+  </script>
+
+  <div class="row row-offcanvas row-offcanvas-right">
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+      <div class="list-group">
+        <a class="list-group-item" href="../">Our Projects</a>
+        <a class="list-group-item" href="https://github.com/university-of-antarctica">GitHub</a>
+        <a class="list-group-item" href="../../aboutus.html">About Us</a>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-9">
+    
+  
+    <h1> ZSRGraph </h1>
+    <p></p>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.time.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.selection.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.symbol.js" type="text/javascript"></script>
+
+<script>
+
+//ZSR info
+full_names={};
+full_names["loz"] = "The Legend of Zelda";
+full_names["aol"] = "Adventures of Link";
+full_names["alttp"] = "A Link to the Past";
+full_names["la"] = "Link's Awakening";
+full_names["oot"] = "Ocarina of Time";
+full_names["mm"] = "Majora's Mask";
+full_names["oos"] = "Oracle of Seasons";
+full_names["ooa"] = "Oracle of Ages";
+full_names["tww"] = "The Wind Waker";
+full_names["fsa"] = "Four Swords Adventures";
+full_names["tmc"] = "The Minish Cap";
+full_names["tp"] = "Twilight Princess";
+full_names["ph"] = "Phantom Hourglass";
+full_names["oot3d"] = "Ocarina of Time 3D";
+full_names["ss"] = "Skyward Sword";
+full_names["albw"] = "A Link Between Worlds";
+full_names["mm3d"] = "Majora's Mask 3D";
+
+// Scrapinghub info
+var apikey = "0e51773a666b47189b524189a6246e81";
+var project = 17416;
+var spider = 1;
+// I have to learn how to generate the correct job id to correspond to a chosen game
+// I may be able to look at all the jobs but I doubt it, having seen that dash's "jobs/list.json" appears to not be accessible for cross domain reasons.
+// it looks like i am not able to schedule a scrape from javascript with scrapinghub
+// i'll have to scrape the pages once a day or so, not too bad.
+// i'll also have to figure out what it looks like to have all 16 games scraped once a day and if there is a predictable, sensical way to map those job #s to one that I can predict here.
+// I think I can grab the JSON from a job and check out the game name there ...
+// not TOO shabby...  well it would work 
+
+// I want to be able to adjust how many players I'm looking at
+// I think that I should scrape the top 100 or something and then have the JS on this page limit how many are graphed
+
+// I need to integrate this with middleman, right? It's just this html file, right? ( and flot.js stuff)
+
+// Do I want to cache the results in some way so I don't make a request as I flip through the games?  I'm fine with making a request for each game, but not each category
+
+// Figure out versions and verified runs and routes
+// this is a big one.
+
+
+
+
+// Let's talk about the data structures I use
+
+
+
+// run : [date_in_ms, time_in_ms, extra_info]
+// runs: [run,run2,run3,...]
+// runner: [name, game, category, runs, best_time, rank, wrholder]
+
+
+
+
+
+
+var my_flot_graph = {};
+var my_game_info = {};
+var my_sh_info = {};
+var my_page_info = {};
+
+my_sh_info.apikey = "0e51773a666b47189b524189a6246e81";
+my_sh_info.project = 17416;
+my_sh_info.spider = 1;
+my_sh_info.min_job = 33;
+my_sh_info.max_job = 37;
+my_sh_info.job = 33;
+
+my_page_info.max_runner = 4;
+
+
+
+function QueryScrapingHub(job, callback){
+  $.get("https://storage.scrapinghub.com/items/"+my_sh_info.project+"/"+my_sh_info.spider+"/"+job+"?apikey="+my_sh_info.apikey+"&format=json",null, callback);
+}
+
+function UpdatePageCallback(data, textStatus, jqXHR){
+  my_game_info = data;
+  ProcessRunners();
+  UpdatePage(my_game_info);
+}
+
+function UpdatePage(game_info){
+  console.log("updating page with the following game data");
+  console.log(game_info);
+  UpdateTitle(game_info);
+  UpdateCategoriesDropdown(game_info);
+  Graph(game_info);
+}
+
+function UpdateTitle(game_info){
+  SetPageTitle(GetLongName(game_info) + " speed runs!");
+}
+function SetPageTitle(title){
+  $("#title").text(title);
+}
+function GetLongName(game_info){
+  var short_name = GetShortName(game_info);
+  var long_name = full_names[short_name];
+  return long_name;
+}
+function GetShortName(game_info){
+  var short_name = game_info[0]["game"];
+  return short_name;
+}
+function UpdateCategoriesDropdown(game_info){
+  var category_set = GetSetOfCategories(game_info);
+  PopulateCategoryDropdown(category_set);
+}
+function GetSetOfCategories(game_info){
+  var categories = {};
+  for (var index in game_info){
+    var runner = game_info[index];
+    categories[runner["category"]]=true;
+  }
+  return categories;
+}
+function PopulateCategoryDropdown(category_set){
+  $("#category_dropdown").empty();
+  category_set = sortObject(category_set);
+  for(var category in category_set){
+    var html = "<option value=\""+category+"\">"+category+"</option>";
+    if(category == "Any%"){
+      $("#category_dropdown").prepend(html);
+    }
+    else{
+      $("#category_dropdown").append(html);
+    }
+  }
+// TODO: fix problems with the All Categories section by
+// labelling which category a run is in
+// $("#category_dropdown").append("<option value='All Categories'>All Categories</option>");
+
+}
+function sortObject(unordered){
+  var ordered = {};
+  Object.keys(unordered).sort().forEach(function(key){
+    ordered[key] = unordered[key];
+  });
+  return ordered;
+}
+
+
+function ProcessRunners(){
+  RecordRunnersBestTimes();
+  RecordRunnersRanks();
+  // var runners = my_game_info;
+  // for (index in runners){
+  //   console.log(index + " " + runners[index]["name"]);
+  // }
+  // console.log(GetRunnersInCategory("Any%"));
+  // RecordWRs();
+}
+
+function SortRunners(runners){
+  runners.sort(compareRunnersByBestTime);
+}
+
+
+function Graph(game_info){
+  PreparePlottableData(game_info);
+  PlotMainPlot();
+  PlotOverviewPlot();
+}
+function PreparePlottableData(game_info){
+  var runners = GetPlottableRunners(game_info);
+  my_flot_graph.data = GetPlottableData(runners);
+}
+function GetPlottableRunners(game_info){
+  var desired_category = $("#category_dropdown").val()
+  var runners = GetRunnersInCategory(desired_category);
+  return runners;
+}
+
+function GetRunnersInCategory(category){
+  var runners = [];
+  for(var runner_index in my_game_info){
+    var runner = my_game_info[runner_index];
+    var desired_category = category
+    var actual_category = runner["category"];
+    if(actual_category != desired_category){
+      continue;
+    }
+    else{
+      runners.push(runner);
+    }
+  }
+  return runners;
+}
+
+function PruneLowRunners(runners){
+  my_page_info.max_runner = $("#max_runners_input").val();
+  SortRunners(runners);
+  return runners.slice(0,my_page_info.max_runner);
+}
+
+function compareRunnersByBestTime(runner1, runner2){
+  var t1 = runner1["best_time"];
+  var t2 = runner2["best_time"];
+
+  var result = null;
+  if(t1 < t2) result = -1;
+  if(t1 == t2) result = 0;
+  if(t1 > t2) result = 1;
+  // console.log(ms2HMS(t1) + "  " + result + "  " + ms2HMS(t2));
+  return result;
+}
+
+function RecordRunnersBestTimes(){
+  var runners = my_game_info;
+  for(var runner_index in runners){
+    var runner = runners[runner_index];
+    var runs = runner["runs"];
+    var min_time = 9999999999;
+    for(var run_index in runs){
+      var run = runs[run_index];
+      var time = HMS2ms(run[2]);
+      if(time < min_time){
+        min_time = time;
+      }
+    }
+    runner["best_time"] = min_time;
+    // runner["best_time"] = HMS2ms(runs[0][2]);
+  }
+}
+
+function RecordRunnersRanks(){
+  var category_set = GetSetOfCategories(my_game_info);
+  for(category in category_set){
+    var category_runners = GetRunnersInCategory(category);
+    SortRunners(category_runners);
+      for(var runner_index in category_runners){
+        var runner = category_runners[runner_index];
+        runner["rank"] = parseInt(runner_index)+1;
+      }
+  }
+}
+
+// function RecordWRs(){
+//   console.log("recoding WRs");
+//   var category_set = GetSetOfCategories(my_game_info);
+//   for(category in category_set){
+//     var category_runners = GetRunnersInCategory(category);
+//     var all_category_runs = [];
+//     category_runners.sort(compareRunnersByBestTime);
+//     for(var runner_index in category_runners){
+//       var runner = category_runners[runner_index];
+//       for(var run_index in runner["runs"]){
+//         var run = runner["runs"][run_index];
+//         all_category_runs.push(run);
+//       }
+//     }
+//     // console.log(all_category_runs);
+//     all_category_runs.sort(comparePointsByXBreakTiesByY);
+//     var min_time = 999999999;
+//     for(var run_index in all_category_runs){
+//       var run = all_category_runs[run_index];
+//       var date = run[1];
+//       var time = HMS2ms(run[2]);
+//       // var name = run[3];
+//       // console.log(run_index);
+//       var readable_date = new Date(date).toDateString();
+//       var readable_time = ms2HMS(time);
+//       // console.log(run);
+//       if(time < min_time){
+//         min_time = time;
+//         run["WR"] = true;
+//         var message =( "someone got a WR(" + readable_time + ") on " + readable_date);
+//         console.log(message);
+//       }
+//     }
+
+//   }
+// }
+
+
+
+
+
+
+
+
+function GetPlottableData(category_runners){
+  var top_runners = PruneLowRunners(category_runners);
+  var flot_data = [];
+  var flot_overview_data = [];
+  var all_point_arrays = [];
+// WR stuff
+for(var runner_index in category_runners){
+  var runner = category_runners[runner_index];
+  var points = PopulateRunnerFlotInfo(runner);
+  all_point_arrays.push(points);
+}
+var WR_circles = GenerateWRs(all_point_arrays);
+flot_data.push(WR_circles);
+
+// Regular points and lines
+for(var runner_index in top_runners){
+  var runner = top_runners[runner_index];
+  var points = PopulateRunnerFlotInfo(runner);
+  var lines = GeneratePBLines(points["data"]);
+  flot_data.push(lines);
+  flot_data.push(points);
+}
+return flot_data;
+}
+function PopulateRunnerFlotInfo(runner){
+  var this_runners_flot_info = [];
+  this_runners_flot_info["label"] = "("+runner["rank"]+") "+runner["name"];
+  this_runners_flot_info["data"] = [];
+  this_runners_flot_info["index"] = runner["rank"];
+  var runs = runner["runs"];
+  runs.sort(compareRunsByDate);
+  for(var run_index in runs){
+    var run = runs[run_index]
+    var run_time_string = run[2];
+    var run_time_in_ms = HMS2ms(run_time_string);
+    var run_date_string = run[1];
+    var run_date_in_ms = new Date(run_date_string).getTime();
+    var x_coord = run_date_in_ms;
+    var y_coord = run_time_in_ms;
+    var point = [x_coord, y_coord, runner["name"]];
+    this_runners_flot_info["data"].push(point);
+  }
+  return this_runners_flot_info;
+}
+function GeneratePBLines(points){
+  var previous_PB_time = null;
+  var line_data = [];
+  for(var point_index in points){
+    var point = points[point_index];
+    var run_date = point[0];
+    var run_time = point[1];
+
+    var no_previous_PB = (previous_PB_time == null);
+    var this_run_is_a_new_PB = (run_time < previous_PB_time);
+
+    if(no_previous_PB){
+      var new_PB_time=run_time;
+      line_data.push([run_date,new_PB_time]);
+      previous_PB_time = new_PB_time;
+    }
+    else if(this_run_is_a_new_PB){
+      var new_PB_time=run_time;
+      line_data.push([run_date,previous_PB_time]);
+      line_data.push([run_date,new_PB_time]);
+      previous_PB_time = new_PB_time;
+    }
+  }
+  var lines = {
+    data:line_data,
+    points:{
+      show:false
+    },
+    lines:{
+      show: true
+    },
+    color: "#AAAAAA"
+  };
+  return lines;
+}
+function GenerateWRs(all_point_arrays){
+  all_points = [];
+  for(var runner_index in all_point_arrays){
+    var runner = all_point_arrays[runner_index];
+    var data = runner["data"];
+    for(var run_index in data){
+      var run = data[run_index];
+      all_points.push(run);
+    }
+  }
+  WR_data = [];
+
+  all_points.sort(comparePointsByXBreakTiesByY);
+  var min_time = 9999999999999;
+
+  for(point_index in all_points){
+    var point = all_points[point_index];
+    var date = point[0];
+    var time = point[1];
+    var runner_name = point[2];
+    var runner_rank = point["rank"];
+    var readable_date = new Date(date).toDateString();
+    var readable_time = ms2HMS(time);
+    if(time < min_time){
+      min_time = time;
+      var message =( runner_name+ " got a WR(" + readable_time + ") on " + readable_date);
+      WR_data.push([date, time, message]);
+    }
+  }
+  var WR_circles = {
+    data: WR_data,
+    label:"WRs",
+    points:{
+      symbol:"diamond",
+      radius: 5
+    },
+    index: 0
+  }
+  return WR_circles;
+}
+function comparePointsByXBreakTiesByY(p1,p2){
+  var x1 = p1[0], x2 = p2[0];
+  var y1 = p1[1], y2 = p2[1];
+  var result = null;
+  if(x1 < x2) result = -1;
+  if(x1 == x2){
+    if(y1 < y2) result = -1;
+    if(y1 == y2) result = 0;
+    if(y1 > y2) result = 1;
+  }
+  if(x1 > x2) result = 1;
+  return result;
+}
+
+function PlotMainPlot(){
+  my_flot_graph.plot = $.plot($("#flot-placeholder"),
+    my_flot_graph.data,
+    my_flot_graph.main_graph_options
+    );
+}
+
+function PlotOverviewPlot(){
+  my_flot_graph.overview = $.plot($("#overview"), my_flot_graph.data, my_flot_graph.overview_graph_options );
+}
+
+function toggleRunner(rank){
+  var plot = my_flot_graph.plot;
+  var plot_data = my_flot_graph.plot.getData();
+
+  var points_index = rank*2;
+  var lines_index = rank*2-1;
+
+  console.log("POINT INDEX");
+  console.log(points_index);
+
+  plot_data[points_index].points.show = !plot_data[points_index].points.show;
+  if(rank!=0){
+    plot_data[lines_index].lines.show = !plot_data[lines_index].lines.show;
+  }
+  console.log(plot_data);
+  plot.draw();
+
+
+// console.log(plot.getData());
+// console.log(series);
+// series.points.show = false;
+// // plot.setData(series);
+// plot.draw();
+// my_flot_graph.draw();
+}
+
+function InitializeFlotGraph(){
+  var flot_graph = {};
+  flot_graph.plot ={};
+  flot_graph.overview = {};
+  flot_graph.data = [];
+  flot_graph.main_graph_options = 
+  {
+    xaxis: {
+      mode: "time", timeformat: "%m/%d/%y" 
+    },
+    yaxis: {
+      mode: "time", timeformat: "%H:%M:%S"
+    },
+    grid: {
+      hoverable: true,
+      clickable: true
+    },
+    legend: {
+      show: true,
+      position:"ne",
+      backgroundColor: "green",
+      noColumns:2,
+      container: $("#legend_div"),
+      labelFormatter: function(label, series){
+        return '<a href="#" onClick="toggleRunner('+series.index+'); return false;">' + label+'</a>';
+      }
+    },
+    points: {
+      show: true, 
+      radius: 2, 
+      lineWidth: 4, 
+      fill: false 
+    },
+    lines: { 
+      show: false 
+    },
+    selection: {
+      mode: "xy"
+    }
+  };
+  flot_graph.overview_graph_options = 
+  {
+    legend: {
+      show: false
+    },
+    lines:{
+      show: false
+    },
+    points:{
+      show: false,
+      radius: 5
+    },
+    selection: {
+      mode: "xy"
+    },
+    xaxis: {
+      mode: "time", timeformat: "%m/%y" 
+    },
+    yaxis: {
+      mode: "time", timeformat: "%H:%M:%S"
+    }
+  };
+  return flot_graph;
+}
+
+
+
+function EnableZooming(flot_graph){
+  $("#flot-placeholder").bind("plotselected", function (event, ranges) {
+// clamp the zooming to prevent eternal zoom
+if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
+  ranges.xaxis.to = ranges.xaxis.from + 0.00001;
+}
+if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
+  ranges.yaxis.to = ranges.yaxis.from + 0.00001;
+}
+// do the zooming
+flot_graph.plot = $.plot("#flot-placeholder", flot_graph.data,
+  $.extend(true, {}, flot_graph.main_graph_options, {
+    xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
+    yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
+  })
+  );
+// don't fire event on the overview to prevent eternal loop
+flot_graph.overview.setSelection(ranges, true);
+});
+  $("#overview").bind("plotselected", function (event, ranges) {
+    flot_graph.plot.setSelection(ranges);
+  });
+}
+
+function hms2seconds(hms_string){
+  var array = hms_string.split(":");
+  var seconds_from_hours =   parseInt(array[0])*3600;
+  var seconds_from_minutes = parseInt(array[1])*60;
+  var seconds_from_seconds = parseInt(array[2]);
+  var total_seconds = seconds_from_hours + seconds_from_minutes + seconds_from_seconds;
+  return total_seconds;
+}
+
+function HMS2ms(hms_string){
+  var date = new Date(hms2seconds(hms_string)*1000);
+  return date;
+}
+
+function ms2HMS(ms){
+  var full_seconds = integerDivide(ms,1000);
+  var full_minutes = integerDivide(full_seconds,60);
+  var hours = integerDivide(full_minutes,60);
+  var minutes = full_minutes%60;
+  var seconds = full_seconds%60;
+  if(minutes < 10) minutes = "0"+minutes;
+  if(seconds < 10) seconds = "0"+seconds;
+  var HMS_string = hours + ":" + minutes + ":" + seconds;
+  return HMS_string;
+}
+
+function integerDivide(a,b){
+  return (a/b)>>0;
+}
+
+// return -1 if obj1 is earlier than obj2
+// return  1 if obj1 is later than obj2
+// return  0 if they're on the same day
+function compareRunsByDate(run1, run2){
+// right now runs are tuples (version, date, time)
+var d1 = new Date(run1[1]);
+var d2 = new Date(run2[1]);
+var result = null;
+if(d1==d2)result= 0;
+if(d1<d2) result= -1;
+if(d1>d2) result= 1;
+return result;
+}
+
+// ENABLE THE UI
+
+function enableTooltip(){
+  $("<div id='tooltip'></div>").css({
+    position: "absolute",
+    display: "none",
+    border: "1px solid #fdd",
+    padding: "2px",
+    "background-color": "#fee",
+    opacity: 0.80
+  }).appendTo("body");
+  $("#flot-placeholder").bind("plothover", function (event, pos, item) {
+    if (item && item.series.label) {
+      var x = item.datapoint[0],
+      y = item.datapoint[1];
+      var time = ms2HMS(y);
+      var date = new Date(x).toDateString();
+      var tooltip = "";
+      if(item.series.label == "WRs"){
+        tooltip = item.series.data[item.dataIndex][2];
+      }
+      else{
+        tooltip = item.series.label + " got a time of " + time + " on " + date
+      }
+      $("#tooltip").html(tooltip)
+      .css({top: item.pageY+5, left: item.pageX+5})
+      .fadeIn(00);
+    } else {
+      $("#tooltip").hide();
+      my_flot_graph.plot.unhighlight();
+    }
+  });
+}
+
+// DROP DOWNS
+
+function enableDropdownCategorySelection(){
+  $("#category_dropdown").change(function(){
+    Graph(my_game_info);
+  });
+}
+function enableDropdownGameSelection(){
+  AddGamesToDropdown();
+  $("#game_dropdown").change(function(){
+    var job = $("#game_dropdown").val();
+    QueryScrapingHub(job,UpdatePageCallback);
+  });
+}
+function AddGamesToDropdown(){
+  var min_job = my_sh_info.min_job;
+  var max_job = my_sh_info.max_job;
+  var current_job = min_job;
+  $("#game_dropdown").empty();
+// AddGameToDropdown(GetLongName(my_game_info),my_sh_info.job);
+// $("#game_dropdown").append("<option value=''>Select Game...</option>");
+do{
+// if(current_job == my_sh_info.job)continue;
+var callback_function = AddGameToDropdownCallback(current_job);
+QueryScrapingHub(current_job,callback_function);
+++current_job;
+}while(current_job < max_job)
+}
+function AddGameToDropdownCallback(current_job){
+  return function(data, textStatus, jqXHR){
+    var game_name = data[0]["game"];
+    var long_name = full_names[game_name];
+    if(current_job == my_sh_info.job){
+// this sets the my_sh_info.job to be the first one that shows up
+// instead of being random based on the order they load
+// this helps match what is actually graphed first, which is the the my_sh_info.job game
+PrependGameToDropdown(long_name,current_job);
+}
+else{
+  AppendGameToDropdown(long_name,current_job);
+}
+}
+}
+function AppendGameToDropdown(game_name, job_number){
+  $("#game_dropdown").append("<option value='"+job_number+"'>"+game_name+"</option>");
+}
+function PrependGameToDropdown(game_name, job_number){
+  $("#game_dropdown").prepend("<option value='"+job_number+"'>"+game_name+"</option>");
+  $("#game_dropdown").val(job_number);
+}
+
+
+function EnableMaxRunnersInput(){
+  $("#max_runners_input").change(function(){
+    Graph(my_game_info);
+  });
+}
+
+
+$(document).ready(function(){
+  enableTooltip();
+  my_flot_graph = InitializeFlotGraph();
+  EnableZooming(my_flot_graph);
+  enableDropdownCategorySelection();
+  enableDropdownGameSelection();
+  EnableMaxRunnersInput();
+  QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
+
+
+});
+
+
+
+
+
+
+</script>
+
+<h1 id="title"> 
+  Loading...
+</h1>
+
+<div id="how_to" class="col-md-12"> 
+  <h3> How To </h3>
+  <p>
+    Hover over a point to get details on that run <br> 
+    Click and drag on the main graph to zoom into a rectangle that you draw <br> 
+    You may also click and drag on the overview to the right to zoom to a specific part of the graph <br> 
+    You can select the game, category, and how many runners to show <br> 
+    Scroll down to read an explanation of the graph
+
+  </p>
+</div>
+
+<div id="controls" class ="col-md-12">
+  Game: <select id="game_dropdown"></select>
+  <br>
+  Category: <select id="category_dropdown"></select>
+  <br>
+  Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50)
+</div>
+
+<div id="flot-placeholder" class="well col-md-12" style="height:500px;"></div>
+
+<div class="col-md-6">
+  <h3>Overview</h3>
+  <div id="overview" class="demo-placeholder" style="height:300px;" ></div>
+</div>
+
+<div class = "col-md-6">
+  <h3>Legend</h3>
+  <p> click on a runner to toggle their runs on the graph</p>
+  <div id="legend_div" ></div>
+</div>
+
+<div  class = "well col-md-12">
+  <h3> Explanation </h3>
+  <p>
+    The graph above depicts speed runs of Zelda games.<br>
+    The x-axis is the date that a run takes place <br>
+    The y-axis is the time that the run took to complete.<br>
+    Points represent a single speed run.<br>
+    Runs done by the same person appear in the same color.<br>
+    A gray line connects a person's runs.  The line shows how that person's personal best has changed over time.<br>
+    Diamonds mark world records as they appear over time.<br>
+    Powered by <a href="http://zeldaspeedruns.com/leaderboards/">ZeldaSpeedruns.com </a> <br>
+    Using <a href="http://scrapinghub.com">ScrapingHub</a> and <a href="http://www.flotcharts.org">Flot</a> which necessitate <a href="http://scrapy.org">Scrapy</a> and <a href="http://jquery.com"> jQuery</a>.
+
+  </p>
+</div>
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+    </div> <!-- end container -->  
+    <!-- right padding -->
+    <div class="col-md-2"></div> 
+  </body>
+</html>
