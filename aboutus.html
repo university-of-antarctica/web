@@ -68,8 +68,17 @@
       function SetImageAsBackground(chosen_image_url){
           $("#background").attr("src",chosen_image_url);
           $("#background").load(function(evt){
+
             $("#background").css('opacity','1');
+
+            // In the future I may try this if it seems more stable
+            // to have the background image be the background of the document
+            // instead of an image's src (necessary for fading afaik)
+            // setTimeout(
+            //   function()
+            //   {$("document").css('background-image','url('+chosen_image_url+')');},3000);
           });
+
       }
     </script>
 
