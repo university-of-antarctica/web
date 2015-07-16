@@ -160,9 +160,7 @@
     
   
     <h1> ZSRGraph </h1>
-    <p></p>
-
-<script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
 
 <script src="../../javascripts/flot/jquery.flot.js" type="text/javascript"></script>
 
@@ -171,6 +169,82 @@
 <script src="../../javascripts/flot/jquery.flot.selection.js" type="text/javascript"></script>
 
 <script src="../../javascripts/flot/jquery.flot.symbol.js" type="text/javascript"></script>
+
+<div id="blurb" class = "well">
+
+  <img class="img-circle" src='http://s3.amazonaws.com/zeldaspeedruns/app/public/system/icons/13/large/link.png?1424044151' alt="ZSRGraph" style="width:140px; height:140px">
+  <p>
+    This project takes data from <a href="http://zeldaspeedruns.com/leaderboards/">ZeldaSpeedruns.com </a> and graphs it to show how speedruns have evolved over time. <br>
+    Choose a game and a category to see your favorite runners at their best and their worst!
+
+    
+  </p>
+
+</div>
+
+<div id="how_to" class="col-md-6"> 
+
+    <a id="confused_link" href="javascript:void(0)" >Confused? click here. </a>
+
+  <p id="confused_text">
+    A speedrun is an attempt by someone to beat a video game as fast as possible, with certain restrictions. <br>
+    The x-axis is the date that a run takes place. <br>
+    The y-axis is the time that the run took to complete.<br>
+    Points represent a single speed run.<br>
+    Runs done by the same person appear in the same color.<br>
+  </p>
+
+  <h2> How To </h2>
+  <p>
+    Hover over a point to get details on that run. <br> 
+    Click and drag on the main graph to zoom into a rectangle that you draw. <br> 
+    You may also click and drag on the overview below to zoom to a specific part of the graph. <br> 
+    You can select the game, category, and how many runners to show. <br> 
+
+  </p>
+</div>
+
+<div class="row"></div>
+
+<iframe id="zsr_iframe" src="" class="col-md-12" style="height:300px;"></iframe>
+
+<h1 id="title"> 
+  Loading...
+</h1>
+
+<div id="controls" class ="col-md-12">
+  Game: <select id="game_dropdown"></select>
+  <br>
+  Category: <select id="category_dropdown"></select>
+  <br>
+  Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50) 
+  <br>
+  <button id="zoom_to_fit_button">Zoom To Fit </button>
+</div>
+
+<div id="flot-placeholder" class="well col-lg-12" style="height:500px;"></div>
+
+<div class="col-md-6">
+  <h3>Overview</h3>
+  <div id="overview" class="demo-placeholder" style="height:300px;" ></div>
+</div>
+
+<div class = "col-md-6">
+  <h3>Legend</h3>
+  <p> Click on a runner to toggle their runs on the graph.<br>
+    A gray line shows a person's personal best over time.<br>
+    Yellow Diamonds mark world records as they appear.<br>
+  </p>
+  <div id="legend_div" ></div>
+</div>
+
+<div  class = "well col-md-12">
+  
+    Created with information stolen from <a href="http://zeldaspeedruns.com/leaderboards/">ZeldaSpeedruns.com </a> <br>
+    Using <a href="http://scrapinghub.com">ScrapingHub</a> and <a href="http://www.flotcharts.org">Flot</a> which necessitate <a href="http://scrapy.org">Scrapy</a> and <a href="http://jquery.com"> jQuery</a>.
+
+  </p>
+</div>
 
 <script>
 
@@ -222,10 +296,10 @@ var spider = 1;
 // Let's talk about the data structures I use
 
 
-
-// run : [date_in_ms, time_in_ms, extra_info]
+// run: [???]
+// point : [date_in_ms, time_in_ms, extra_info]
 // runs: [run,run2,run3,...]
-// runner: [name, game, category, runs, best_time, rank, wrholder]
+// runner: [name, game, category, runs, best_run_time, best_run_date, rank, wrholder]
 
 
 
@@ -240,16 +314,45 @@ var my_page_info = {};
 my_sh_info.apikey = "0e51773a666b47189b524189a6246e81";
 my_sh_info.project = 17416;
 my_sh_info.spider = 1;
-my_sh_info.min_job = 33;
-my_sh_info.max_job = 37;
-my_sh_info.job = 33;
+
+my_sh_info.job_range = 17;
+// my_sh_info.job = 33;
+my_sh_info.latest_job = null;
 
 my_page_info.max_runner = 4;
 
 
+function DetermineJobRange(){
+  var url = "https://storage.scrapinghub.com/jobq/17416/list?apikey=0e51773a666b47189b524189a6246e81&format=json";
+  var callback = function(data, textStatus, jqXHR){
+
+    var job_number = GetLatestJobNumber(data);
+    my_sh_info.latest_job = job_number;
+    var distance_to_min = my_sh_info.job_range-1;
+    my_sh_info.min_job = my_sh_info.latest_job - distance_to_min;
+    my_sh_info.job = my_sh_info.latest_job;
+    // make use of our knowledge of the latest complete jobs
+    QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
+    enableDropdownGameSelection();
+  }
+  $.get(url,null,callback);
+}
+
+function GetLatestJobNumber(data){
+  //key_string looks like 17416/1/36, 36 is the job_number
+   var key_string = data[0]["key"];
+    var length_to_trim = 8
+    var job_number = key_string.slice(length_to_trim);
+    return job_number;
+   
+}
+
 
 function QueryScrapingHub(job, callback){
-  $.get("https://storage.scrapinghub.com/items/"+my_sh_info.project+"/"+my_sh_info.spider+"/"+job+"?apikey="+my_sh_info.apikey+"&format=json",null, callback);
+  
+  var url = "https://storage.scrapinghub.com/items/"+my_sh_info.project+"/"+my_sh_info.spider+"/"+job+"?apikey="+my_sh_info.apikey+"&format=json";
+  // console.log("accessing " + url);
+  $.get(url,null, callback);
 }
 
 function UpdatePageCallback(data, textStatus, jqXHR){
@@ -259,11 +362,16 @@ function UpdatePageCallback(data, textStatus, jqXHR){
 }
 
 function UpdatePage(game_info){
-  console.log("updating page with the following game data");
-  console.log(game_info);
+  // console.log("updating page with the following game data");
+  // console.log(game_info);
   UpdateTitle(game_info);
   UpdateCategoriesDropdown(game_info);
+  UpdateGraphZoom();
   Graph(game_info);
+}
+
+function UpdateGraphZoom(){
+  my_flot_graph.ranges = null;
 }
 
 function UpdateTitle(game_info){
@@ -339,7 +447,11 @@ function Graph(game_info){
   PreparePlottableData(game_info);
   PlotMainPlot();
   PlotOverviewPlot();
+  if(my_flot_graph.ranges){
+    ZoomToRanges(my_flot_graph.ranges);
+  }
 }
+
 function PreparePlottableData(game_info){
   var runners = GetPlottableRunners(game_info);
   my_flot_graph.data = GetPlottableData(runners);
@@ -373,8 +485,8 @@ function PruneLowRunners(runners){
 }
 
 function compareRunnersByBestTime(runner1, runner2){
-  var t1 = runner1["best_time"];
-  var t2 = runner2["best_time"];
+  var t1 = runner1["best_run_time"];
+  var t2 = runner2["best_run_time"];
 
   var result = null;
   if(t1 < t2) result = -1;
@@ -386,6 +498,7 @@ function compareRunnersByBestTime(runner1, runner2){
 
 function RecordRunnersBestTimes(){
   var runners = my_game_info;
+  var best_run_date;
   for(var runner_index in runners){
     var runner = runners[runner_index];
     var runs = runner["runs"];
@@ -395,10 +508,11 @@ function RecordRunnersBestTimes(){
       var time = HMS2ms(run[2]);
       if(time < min_time){
         min_time = time;
+        best_run_date = run[1];
       }
     }
-    runner["best_time"] = min_time;
-    // runner["best_time"] = HMS2ms(runs[0][2]);
+    runner["best_run_date"] = best_run_date;
+    runner["best_run_time"] = min_time;
   }
 }
 
@@ -461,7 +575,6 @@ function RecordRunnersRanks(){
 function GetPlottableData(category_runners){
   var top_runners = PruneLowRunners(category_runners);
   var flot_data = [];
-  var flot_overview_data = [];
   var all_point_arrays = [];
 // WR stuff
 for(var runner_index in category_runners){
@@ -476,12 +589,63 @@ flot_data.push(WR_circles);
 for(var runner_index in top_runners){
   var runner = top_runners[runner_index];
   var points = PopulateRunnerFlotInfo(runner);
-  var lines = GeneratePBLines(points["data"]);
+  var lines = GeneratePBLines(runner,points["data"]);
   flot_data.push(lines);
   flot_data.push(points);
 }
+
+// leaderboard
+// var leaderboard_points = GenerateLeaderboardPoints(category_runners);
+// flot_data.push(leaderboard_points);
+
+
 return flot_data;
 }
+
+function GenerateLeaderboardPoints(category_runners){
+  var flot_info = {}
+  flot_info["label"] = "Leaderboard";
+
+  var points = [];
+  var num_runners = my_page_info.max_runner;
+  var start = num_runners;
+  var runners = category_runners.slice(num_runners);
+  for(var runner_index in runners){
+    var runner = runners[runner_index];
+    var date_in_ms = MDY2ms(runner["best_run_date"]);//Tomorrow2ms();
+    var time_in_ms = runner["best_run_time"];
+    var point = [date_in_ms, time_in_ms, runner["name"]];
+    points.push(point);
+  }
+  console.log(points);
+
+  flot_info["data"] = points;
+  return flot_info;
+}
+
+function Tomorrow2ms(){
+  var today = new Date();
+  var today_in_ms = today.getTime();
+  var ms_in_a_day = 86400000;
+  var tomorrow_in_ms = today_in_ms + ms_in_a_day;
+  return tomorrow_in_ms;
+}
+
+
+function MDY2ms(MDY){
+  var ms = new Date(MDY).getTime();
+  return ms;
+}
+
+function Run2Point(run){
+  var run_time_in_ms = HMS2ms(run[2]);
+  var run_date_in_ms = MDY2ms(run[1]);
+  var x_coord = run_date_in_ms;
+  var y_coord = run_time_in_ms;
+  var point = [x_coord, y_coord];
+  return point;
+}
+
 function PopulateRunnerFlotInfo(runner){
   var this_runners_flot_info = [];
   this_runners_flot_info["label"] = "("+runner["rank"]+") "+runner["name"];
@@ -490,19 +654,14 @@ function PopulateRunnerFlotInfo(runner){
   var runs = runner["runs"];
   runs.sort(compareRunsByDate);
   for(var run_index in runs){
-    var run = runs[run_index]
-    var run_time_string = run[2];
-    var run_time_in_ms = HMS2ms(run_time_string);
-    var run_date_string = run[1];
-    var run_date_in_ms = new Date(run_date_string).getTime();
-    var x_coord = run_date_in_ms;
-    var y_coord = run_time_in_ms;
-    var point = [x_coord, y_coord, runner["name"]];
+    var run = runs[run_index];
+    var point = Run2Point(run);
+    point[2] = runner["name"];
     this_runners_flot_info["data"].push(point);
   }
   return this_runners_flot_info;
 }
-function GeneratePBLines(points){
+function GeneratePBLines(runner, points){
   var previous_PB_time = null;
   var line_data = [];
   for(var point_index in points){
@@ -533,10 +692,11 @@ function GeneratePBLines(points){
     lines:{
       show: true
     },
-    color: "#AAAAAA"
+    color: runner["rank"]
   };
   return lines;
 }
+
 function GenerateWRs(all_point_arrays){
   all_points = [];
   for(var runner_index in all_point_arrays){
@@ -609,23 +769,13 @@ function toggleRunner(rank){
   var points_index = rank*2;
   var lines_index = rank*2-1;
 
-  console.log("POINT INDEX");
-  console.log(points_index);
+
 
   plot_data[points_index].points.show = !plot_data[points_index].points.show;
   if(rank!=0){
     plot_data[lines_index].lines.show = !plot_data[lines_index].lines.show;
   }
-  console.log(plot_data);
   plot.draw();
-
-
-// console.log(plot.getData());
-// console.log(series);
-// series.points.show = false;
-// // plot.setData(series);
-// plot.draw();
-// my_flot_graph.draw();
 }
 
 function InitializeFlotGraph(){
@@ -677,8 +827,8 @@ function InitializeFlotGraph(){
       show: false
     },
     points:{
-      show: false,
-      radius: 5
+      show: true,
+      radius: 1
     },
     selection: {
       mode: "xy"
@@ -697,26 +847,44 @@ function InitializeFlotGraph(){
 
 function EnableZooming(flot_graph){
   $("#flot-placeholder").bind("plotselected", function (event, ranges) {
-// clamp the zooming to prevent eternal zoom
-if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
-  ranges.xaxis.to = ranges.xaxis.from + 0.00001;
-}
-if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
-  ranges.yaxis.to = ranges.yaxis.from + 0.00001;
-}
-// do the zooming
-flot_graph.plot = $.plot("#flot-placeholder", flot_graph.data,
-  $.extend(true, {}, flot_graph.main_graph_options, {
-    xaxis: { min: ranges.xaxis.from, max: ranges.xaxis.to },
-    yaxis: { min: ranges.yaxis.from, max: ranges.yaxis.to }
-  })
-  );
-// don't fire event on the overview to prevent eternal loop
-flot_graph.overview.setSelection(ranges, true);
-});
+    // clamp the zooming to prevent eternal zoom
+    if (ranges.xaxis.to - ranges.xaxis.from < 0.00001) {
+      ranges.xaxis.to = ranges.xaxis.from + 0.00001;
+    }
+    if (ranges.yaxis.to - ranges.yaxis.from < 0.00001) {
+      ranges.yaxis.to = ranges.yaxis.from + 0.00001;
+    }
+    // do the zooming
+
+    flot_graph.ranges = ranges;
+    ZoomToRanges(flot_graph.ranges);
+
+    // don't fire event on the overview to prevent eternal loop
+    flot_graph.overview.setSelection(ranges, true);
+  });
+
   $("#overview").bind("plotselected", function (event, ranges) {
     flot_graph.plot.setSelection(ranges);
   });
+}
+function ZoomToRanges(ranges){
+  ZoomTo(
+    ranges.xaxis.from,
+    ranges.xaxis.to,
+    ranges.yaxis.from,
+    ranges.yaxis.to);
+
+    // my_flot_graph.plot.setSelection(ranges);
+  // my_flot_graph.overview.setSelection(ranges);
+}
+function ZoomTo(xmin,xmax,ymin,ymax){
+  my_flot_graph.plot = $.plot("#flot-placeholder", my_flot_graph.data,
+  $.extend(true, {}, my_flot_graph.main_graph_options, {
+    xaxis: { min: xmin, max: xmax },
+    yaxis: { min: ymin, max: ymax }
+  })
+  );
+
 }
 
 function hms2seconds(hms_string){
@@ -784,6 +952,9 @@ function enableTooltip(){
       if(item.series.label == "WRs"){
         tooltip = item.series.data[item.dataIndex][2];
       }
+      else if(item.series.label == "Leaderboard"){
+        tooltip = item.series.data[item.dataIndex][2] + " got a time of " + time + " on " + date;
+      }
       else{
         tooltip = item.series.label + " got a time of " + time + " on " + date
       }
@@ -801,6 +972,7 @@ function enableTooltip(){
 
 function enableDropdownCategorySelection(){
   $("#category_dropdown").change(function(){
+    UpdateGraphZoom();
     Graph(my_game_info);
   });
 }
@@ -813,7 +985,7 @@ function enableDropdownGameSelection(){
 }
 function AddGamesToDropdown(){
   var min_job = my_sh_info.min_job;
-  var max_job = my_sh_info.max_job;
+  var max_job = my_sh_info.latest_job;
   var current_job = min_job;
   $("#game_dropdown").empty();
 // AddGameToDropdown(GetLongName(my_game_info),my_sh_info.job);
@@ -823,28 +995,30 @@ do{
 var callback_function = AddGameToDropdownCallback(current_job);
 QueryScrapingHub(current_job,callback_function);
 ++current_job;
-}while(current_job < max_job)
+}while(current_job <= max_job)
 }
 function AddGameToDropdownCallback(current_job){
   return function(data, textStatus, jqXHR){
     var game_name = data[0]["game"];
-    var long_name = full_names[game_name];
+    var short_name = game_name;
+    var long_name = full_names[short_name];
     if(current_job == my_sh_info.job){
 // this sets the my_sh_info.job to be the first one that shows up
 // instead of being random based on the order they load
 // this helps match what is actually graphed first, which is the the my_sh_info.job game
-PrependGameToDropdown(long_name,current_job);
+      SetZSRIframe(short_name,"");
+PrependGameToDropdown(short_name,long_name,current_job);
 }
 else{
-  AppendGameToDropdown(long_name,current_job);
+  AppendGameToDropdown(short_name,long_name,current_job);
 }
 }
 }
-function AppendGameToDropdown(game_name, job_number){
-  $("#game_dropdown").append("<option value='"+job_number+"'>"+game_name+"</option>");
+function AppendGameToDropdown(short_name, long_name, job_number){
+  $("#game_dropdown").append("<option value='"+job_number+"' name='"+ short_name+"'>"+long_name+"</option>");
 }
-function PrependGameToDropdown(game_name, job_number){
-  $("#game_dropdown").prepend("<option value='"+job_number+"'>"+game_name+"</option>");
+function PrependGameToDropdown(short_name, long_name , job_number){
+  $("#game_dropdown").prepend("<option value='"+job_number+"' name='"+ short_name+"'>"+long_name+"</option>");
   $("#game_dropdown").val(job_number);
 }
 
@@ -855,78 +1029,63 @@ function EnableMaxRunnersInput(){
   });
 }
 
+function EnableRedrawGraphOnResize(){
+  $(window).resize(function(){
+    Graph(my_game_info);
+  })
+}
+
+function EnableConfusedText(){
+  $("#confused_text").hide();
+  $("#confused_link").click(function(){
+    $("#confused_text").toggle();
+  });
+}
+
+function EnableZoomToFitButton(){
+  $("#zoom_to_fit_button").click(function(){
+    UpdateGraphZoom();
+    Graph(my_game_info);
+  });
+
+}
+
+function EnableZSRIframe(){
+  $("#game_dropdown").change(function(){
+    var short_game_name = $("#game_dropdown option:selected").attr("name");
+    SetZSRIframe(short_game_name,"");
+  });
+  $("#category_dropdown").change(function(){
+    var short_category_name = $("#category_dropdown option:selected").attr("name");
+  });
+}
+
+function SetZSRIframe(game,category){
+  $("#zsr_iframe").attr("src","http://zeldaspeedruns.com/leaderboards/"+game+"/"+category);
+}
 
 $(document).ready(function(){
   enableTooltip();
+  DetermineJobRange();
   my_flot_graph = InitializeFlotGraph();
   EnableZooming(my_flot_graph);
   enableDropdownCategorySelection();
-  enableDropdownGameSelection();
   EnableMaxRunnersInput();
-  QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
-
-
+  EnableRedrawGraphOnResize();
+  EnableConfusedText();
+  EnableZoomToFitButton();
+  EnableZSRIframe();
+  HalfWidthOfBlurb();
 });
 
-
+function HalfWidthOfBlurb(){
+  $("#blurb").addClass("col-md-6");
+}
 
 
 
 
 </script>
-
-<h1 id="title"> 
-  Loading...
-</h1>
-
-<div id="how_to" class="col-md-12"> 
-  <h3> How To </h3>
-  <p>
-    Hover over a point to get details on that run <br> 
-    Click and drag on the main graph to zoom into a rectangle that you draw <br> 
-    You may also click and drag on the overview to the right to zoom to a specific part of the graph <br> 
-    You can select the game, category, and how many runners to show <br> 
-    Scroll down to read an explanation of the graph
-
-  </p>
-</div>
-
-<div id="controls" class ="col-md-12">
-  Game: <select id="game_dropdown"></select>
-  <br>
-  Category: <select id="category_dropdown"></select>
-  <br>
-  Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50)
-</div>
-
-<div id="flot-placeholder" class="well col-md-12" style="height:500px;"></div>
-
-<div class="col-md-6">
-  <h3>Overview</h3>
-  <div id="overview" class="demo-placeholder" style="height:300px;" ></div>
-</div>
-
-<div class = "col-md-6">
-  <h3>Legend</h3>
-  <p> click on a runner to toggle their runs on the graph</p>
-  <div id="legend_div" ></div>
-</div>
-
-<div  class = "well col-md-12">
-  <h3> Explanation </h3>
-  <p>
-    The graph above depicts speed runs of Zelda games.<br>
-    The x-axis is the date that a run takes place <br>
-    The y-axis is the time that the run took to complete.<br>
-    Points represent a single speed run.<br>
-    Runs done by the same person appear in the same color.<br>
-    A gray line connects a person's runs.  The line shows how that person's personal best has changed over time.<br>
-    Diamonds mark world records as they appear over time.<br>
-    Powered by <a href="http://zeldaspeedruns.com/leaderboards/">ZeldaSpeedruns.com </a> <br>
-    Using <a href="http://scrapinghub.com">ScrapingHub</a> and <a href="http://www.flotcharts.org">Flot</a> which necessitate <a href="http://scrapy.org">Scrapy</a> and <a href="http://jquery.com"> jQuery</a>.
-
-  </p>
-</div>
 
 
   </div>
