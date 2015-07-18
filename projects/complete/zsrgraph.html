@@ -227,6 +227,8 @@
   Category: <select id="category_dropdown"></select>
 </div>
 
+<div class="row"></div>
+
 <div id="flot-placeholder" class="well col-lg-12" style="height:500px;"></div>
 
 <div class="col-md-6">
@@ -249,10 +251,16 @@
 </div>
 
 <div  class = "well col-md-12">
-  
+  <p>
     Created with information stolen from <a href="http://zeldaspeedruns.com/leaderboards/">ZeldaSpeedruns.com </a> <br>
     Using <a href="http://scrapinghub.com">ScrapingHub</a> and <a href="http://www.flotcharts.org">Flot</a> which necessitate <a href="http://scrapy.org">Scrapy</a> and <a href="http://jquery.com"> jQuery</a>.
-
+  </p>
+  <p>
+    This project is a work in progress; no information is guaranteed to be correct.
+    <br>
+    Theoretically, the data is updated once a day.  
+    <br>
+    Direct feedback to <a href="mailto:lovestevend+uant@gmail.com">lovestevend+uant@gmail.com</a>
   </p>
 </div>
 
@@ -391,6 +399,7 @@ function PopulateCategoryDropdown(category_set){
     var html = "<option value=\""+category+"\">"+category+"</option>";
     if(category == "Any%"){
       $("#category_dropdown").prepend(html);
+      $("#category_dropdown").val(category);
     }
     else{
       $("#category_dropdown").append(html);
@@ -541,14 +550,27 @@ function GetPlottableData(category_runners){
   var top_runners = PruneLowRunners(category_runners);
 
 
-// Regular points and lines
+// Regular points 
 for(var runner_index in top_runners){
   var runner = top_runners[runner_index];
   var points = GenerateFlotPoints(runner);
   var lines = GenerateFlotPBLines(runner,points["data"]);
   flot_data.unshift(points);
   flot_data.unshift(lines);
+
 }
+
+// // Regular lines
+// for(var runner_index in top_runners){
+//   var runner = top_runners[runner_index];
+
+// }
+
+
+
+
+
+
 
 
 
@@ -667,12 +689,13 @@ function GenerateFlotPBLines(runner, points){
   var flot_lines = {
     data:line_data,
     points:{
-      show:false
+      show:false,
     },
     lines:{
       show: true
     },
-     color: runner["rank"]
+     color: runner["rank"],
+     hoverable: false
   };
   return flot_lines;
 }
@@ -755,11 +778,11 @@ function PlotOverviewPlot(){
 }
 
 function toggleRunner(rank){
-  console.log("toggling " + rank);
+  // console.log("toggling " + rank);
   var plot = my_flot_graph.plot;
   var plot_data = my_flot_graph.plot.getData();
   // console.log(plot_data);
-  console.log(my_flot_graph);
+  // console.log(my_flot_graph);
 
   var first_index = plot_data.length-1-1; // WR is the last element
   var points_offset = (rank-1)*2;
@@ -775,8 +798,8 @@ function toggleRunner(rank){
   var points_index = first_index+points_offset;
   var lines_index = first_index+lines_offset;
 
-  console.log(points_index);
-  console.log(lines_index);
+  // console.log(points_index);
+  // console.log(lines_index);
 
 
   plot_data[points_index].points.show = !plot_data[points_index].points.show;
@@ -960,6 +983,7 @@ function enableTooltip(){
     opacity: 0.80
   }).appendTo("body");
   $("#flot-placeholder").bind("plothover", function (event, pos, item) {
+
     if (item && item.series.label) {
       var x = item.datapoint[0],
       y = item.datapoint[1];
@@ -976,7 +1000,7 @@ function enableTooltip(){
         tooltip = item.series.label + " got a time of " + time + " on " + date
       }
       $("#tooltip").html(tooltip)
-      .css({top: item.pageY+5, left: item.pageX+5})
+      .css({top: item.pageY+8, left: item.pageX+8})
       .fadeIn(00);
     } else {
       $("#tooltip").hide();
@@ -1061,18 +1085,14 @@ function EnableZoomToFitButton(){
   $("#zoom_to_fit_button").click(function(){
     UpdateGraphZoom();
     Graph(my_game_info);
-    // ShowAllWRHolders();
-    // HideLowRunners();
   });
 }
 function ShowAllWRHolders(){
   var holders = my_page_info.wr_holders;
   for(var index in holders){
     var rank = holders[index];
-    console.log(index + ": " + rank);
     toggleRunner(rank);
   }
-  console.log("done");
 }
 
 function EnableZSRIframe(){
