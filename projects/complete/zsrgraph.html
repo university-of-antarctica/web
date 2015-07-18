@@ -277,33 +277,8 @@ full_names["ss"] = "Skyward Sword";
 full_names["albw"] = "A Link Between Worlds";
 full_names["mm3d"] = "Majora's Mask 3D";
 
-// Scrapinghub info
-var apikey = "0e51773a666b47189b524189a6246e81";
-var project = 17416;
-var spider = 1;
-// I have to learn how to generate the correct job id to correspond to a chosen game
-// I may be able to look at all the jobs but I doubt it, having seen that dash's "jobs/list.json" appears to not be accessible for cross domain reasons.
-// it looks like i am not able to schedule a scrape from javascript with scrapinghub
-// i'll have to scrape the pages once a day or so, not too bad.
-// i'll also have to figure out what it looks like to have all 16 games scraped once a day and if there is a predictable, sensical way to map those job #s to one that I can predict here.
-// I think I can grab the JSON from a job and check out the game name there ...
-// not TOO shabby...  well it would work 
 
-// I want to be able to adjust how many players I'm looking at
-// I think that I should scrape the top 100 or something and then have the JS on this page limit how many are graphed
-
-// I need to integrate this with middleman, right? It's just this html file, right? ( and flot.js stuff)
-
-// Do I want to cache the results in some way so I don't make a request as I flip through the games?  I'm fine with making a request for each game, but not each category
-
-// Figure out versions and verified runs and routes
-// this is a big one.
-
-
-
-
-// Let's talk about the data structures I use
-
+// Figure outverified runs
 
 // run: [???]
 // point : [date_in_ms, time_in_ms, extra_info]
@@ -320,7 +295,6 @@ var my_game_info = {};
 var my_sh_info = {};
 var my_page_info = {};
 
-my_sh_info.apikey = "0e51773a666b47189b524189a6246e81";
 my_sh_info.project = 17416;
 my_sh_info.spider = 1;
 
@@ -332,7 +306,7 @@ my_page_info.max_runner = 4;
 
 
 function DetermineJobRange(){
-  var url = "https://storage.scrapinghub.com/jobq/17416/list?apikey=0e51773a666b47189b524189a6246e81&format=json";
+  var url = "http://uofantarctica.com/scrapinghub/jobs";
   var callback = function(data, textStatus, jqXHR){
 
     var job_number = GetLatestJobNumber(data);
@@ -344,7 +318,7 @@ function DetermineJobRange(){
     QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
     enableDropdownGameSelection();
   }
-  $.get(url,null,callback);
+  $.getJSON(url,null,callback);
 }
 
 function GetLatestJobNumber(data){
@@ -358,10 +332,8 @@ function GetLatestJobNumber(data){
 
 
 function QueryScrapingHub(job, callback){
-  
-  var url = "https://storage.scrapinghub.com/items/"+my_sh_info.project+"/"+my_sh_info.spider+"/"+job+"?apikey="+my_sh_info.apikey+"&format=json";
-  // console.log("accessing " + url);
-  $.get(url,null, callback);
+  var url = "http://uofantarctica.com/scrapinghub/items/"+job;
+  $.getJSON(url,null, callback);
 }
 
 function UpdatePageCallback(data, textStatus, jqXHR){
@@ -371,8 +343,6 @@ function UpdatePageCallback(data, textStatus, jqXHR){
 }
 
 function UpdatePage(game_info){
-  // console.log("updating page with the following game data");
-  // console.log(game_info);
   UpdateTitle(game_info);
   UpdateCategoriesDropdown(game_info);
   UpdateGraphZoom();
@@ -439,12 +409,6 @@ function sortObject(unordered){
 function ProcessRunners(){
   RecordRunnersBestTimes();
   RecordRunnersRanks();
-  // var runners = my_game_info;
-  // for (index in runners){
-  //   console.log(index + " " + runners[index]["name"]);
-  // }
-  // console.log(GetRunnersInCategory("Any%"));
-  // RecordWRs();
 }
 
 function SortRunners(runners){
@@ -501,7 +465,6 @@ function compareRunnersByBestTime(runner1, runner2){
   if(t1 < t2) result = -1;
   if(t1 == t2) result = 0;
   if(t1 > t2) result = 1;
-  // console.log(ms2HMS(t1) + "  " + result + "  " + ms2HMS(t2));
   return result;
 }
 
@@ -537,62 +500,11 @@ function RecordRunnersRanks(){
   }
 }
 
-// function RecordWRs(){
-//   console.log("recoding WRs");
-//   var category_set = GetSetOfCategories(my_game_info);
-//   for(category in category_set){
-//     var category_runners = GetRunnersInCategory(category);
-//     var all_category_runs = [];
-//     category_runners.sort(compareRunnersByBestTime);
-//     for(var runner_index in category_runners){
-//       var runner = category_runners[runner_index];
-//       for(var run_index in runner["runs"]){
-//         var run = runner["runs"][run_index];
-//         all_category_runs.push(run);
-//       }
-//     }
-//     // console.log(all_category_runs);
-//     all_category_runs.sort(comparePointsByXBreakTiesByY);
-//     var min_time = 999999999;
-//     for(var run_index in all_category_runs){
-//       var run = all_category_runs[run_index];
-//       var date = run[1];
-//       var time = HMS2ms(run[2]);
-//       // var name = run[3];
-//       // console.log(run_index);
-//       var readable_date = new Date(date).toDateString();
-//       var readable_time = ms2HMS(time);
-//       // console.log(run);
-//       if(time < min_time){
-//         min_time = time;
-//         run["WR"] = true;
-//         var message =( "someone got a WR(" + readable_time + ") on " + readable_date);
-//         console.log(message);
-//       }
-//     }
-
-//   }
-// }
-
-
-
-
-
-
-
-
 function GetPlottableData(category_runners){
   var top_runners = PruneLowRunners(category_runners);
   var flot_data = [];
   var all_point_arrays = [];
-// WR stuff
-for(var runner_index in category_runners){
-  var runner = category_runners[runner_index];
-  var points = PopulateRunnerFlotInfo(runner);
-  all_point_arrays.push(points);
-}
-var WR_circles = GenerateWRs(all_point_arrays);
-flot_data.push(WR_circles);
+
 
 // Regular points and lines
 for(var runner_index in top_runners){
@@ -602,6 +514,15 @@ for(var runner_index in top_runners){
   flot_data.push(lines);
   flot_data.push(points);
 }
+
+// WR stuff
+for(var runner_index in category_runners){
+  var runner = category_runners[runner_index];
+  var points = PopulateRunnerFlotInfo(runner);
+  all_point_arrays.push(points);
+}
+var WR_circles = GenerateWRs(all_point_arrays);
+flot_data.unshift(WR_circles);
 
 // leaderboard
 // var leaderboard_points = GenerateLeaderboardPoints(category_runners);
@@ -997,8 +918,6 @@ function AddGamesToDropdown(){
   var max_job = my_sh_info.latest_job;
   var current_job = min_job;
   $("#game_dropdown").empty();
-// AddGameToDropdown(GetLongName(my_game_info),my_sh_info.job);
-// $("#game_dropdown").append("<option value=''>Select Game...</option>");
 do{
 // if(current_job == my_sh_info.job)continue;
 var callback_function = AddGameToDropdownCallback(current_job);
