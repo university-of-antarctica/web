@@ -225,24 +225,25 @@
   Game: <select id="game_dropdown"></select>
   <br>
   Category: <select id="category_dropdown"></select>
-  <br>
-  Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50) 
-  <br>
-  <button id="zoom_to_fit_button">Zoom To Fit </button>
 </div>
 
 <div id="flot-placeholder" class="well col-lg-12" style="height:500px;"></div>
 
 <div class="col-md-6">
+  <button id="zoom_to_fit_button">Zoom To Fit </button>
   <h3>Overview</h3>
   <div id="overview" class="demo-placeholder" style="height:300px;" ></div>
 </div>
 
 <div class = "col-md-6">
+  Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50)
+  <br>
+  <input type="checkbox" id="show_wr_holders_checkbox">Show Everyone who has held a World Record</input>
   <h3>Legend</h3>
-  <p> Click on a runner to toggle their runs on the graph.<br>
-    A gray line shows a person's personal best over time.<br>
-    Yellow Diamonds mark world records as they appear.<br>
+  <p>
+    Runners being graphed are listed below. <br>
+    Colored lines trace out runners' personal best over time.<br>
+    Yellow diamonds mark world records as they appear.<br>
   </p>
   <div id="legend_div" ></div>
 </div>
@@ -303,6 +304,7 @@ my_sh_info.job_range = 17;
 my_sh_info.latest_job = null;
 
 my_page_info.max_runner = 4;
+my_page_info.wr_holders = [];
 
 
 function DetermineJobRange(){
@@ -315,7 +317,7 @@ function DetermineJobRange(){
     my_sh_info.min_job = my_sh_info.latest_job - distance_to_min;
     my_sh_info.job = my_sh_info.latest_job;
     // make use of our knowledge of the latest complete jobs
-    QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
+    // QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
     enableDropdownGameSelection();
   }
   $.getJSON(url,null,callback);
@@ -337,8 +339,10 @@ function QueryScrapingHub(job, callback){
 }
 
 function UpdatePageCallback(data, textStatus, jqXHR){
+
   my_game_info = data;
   ProcessRunners();
+  // console.log(data);
   UpdatePage(my_game_info);
 }
 
@@ -417,7 +421,7 @@ function SortRunners(runners){
 
 
 function Graph(game_info){
-  PreparePlottableData(game_info);
+  PreparePlottableData(game_info); // getplottabledata -> prune low
   PlotMainPlot();
   PlotOverviewPlot();
   if(my_flot_graph.ranges){
@@ -452,10 +456,24 @@ function GetRunnersInCategory(category){
 }
 
 function PruneLowRunners(runners){
-  my_page_info.max_runner = $("#max_runners_input").val();
+  my_page_info.max_runner = parseInt($("#max_runners_input").val());
   SortRunners(runners);
-  return runners.slice(0,my_page_info.max_runner);
+  var pruned_runners = [];
+  for(var index in runners){
+    var rank = parseInt(index)+1;
+    if(rank <= my_page_info.max_runner){
+      pruned_runners.push(runners[index]);
+      continue;
+    }
+    if($("#show_wr_holders_checkbox").is(':checked')){
+      if (my_page_info.wr_holders.indexOf(rank) != -1){
+        pruned_runners.push(runners[index]);
+      }
+    }
+  }
+  return pruned_runners;//.slice(0,my_page_info.max_runner);
 }
+
 
 function compareRunnersByBestTime(runner1, runner2){
   var t1 = runner1["best_run_time"];
@@ -493,36 +511,48 @@ function RecordRunnersRanks(){
   for(category in category_set){
     var category_runners = GetRunnersInCategory(category);
     SortRunners(category_runners);
-      for(var runner_index in category_runners){
-        var runner = category_runners[runner_index];
-        runner["rank"] = parseInt(runner_index)+1;
-      }
+    for(var runner_index in category_runners){
+      var runner = category_runners[runner_index];
+      var rank = parseInt(runner_index) + 1;
+      runner["rank"] = rank
+    }
   }
 }
 
+
 function GetPlottableData(category_runners){
-  var top_runners = PruneLowRunners(category_runners);
   var flot_data = [];
-  var all_point_arrays = [];
+
+
+
+  // WR stuff
+    var all_point_arrays = [];
+
+  for(var runner_index in category_runners){
+    var runner = category_runners[runner_index];
+    var points = GenerateFlotPoints(runner);
+    all_point_arrays.push(points);
+  }
+  var WR_circles = GenerateFlotWRPoints(all_point_arrays);
+  flot_data.unshift(WR_circles);
+
+
+
+  var top_runners = PruneLowRunners(category_runners);
 
 
 // Regular points and lines
 for(var runner_index in top_runners){
   var runner = top_runners[runner_index];
-  var points = PopulateRunnerFlotInfo(runner);
-  var lines = GeneratePBLines(runner,points["data"]);
-  flot_data.push(lines);
-  flot_data.push(points);
+  var points = GenerateFlotPoints(runner);
+  var lines = GenerateFlotPBLines(runner,points["data"]);
+  flot_data.unshift(points);
+  flot_data.unshift(lines);
 }
 
-// WR stuff
-for(var runner_index in category_runners){
-  var runner = category_runners[runner_index];
-  var points = PopulateRunnerFlotInfo(runner);
-  all_point_arrays.push(points);
-}
-var WR_circles = GenerateWRs(all_point_arrays);
-flot_data.unshift(WR_circles);
+
+
+
 
 // leaderboard
 // var leaderboard_points = GenerateLeaderboardPoints(category_runners);
@@ -547,7 +577,7 @@ function GenerateLeaderboardPoints(category_runners){
     var point = [date_in_ms, time_in_ms, runner["name"]];
     points.push(point);
   }
-  console.log(points);
+  
 
   flot_info["data"] = points;
   return flot_info;
@@ -576,22 +606,42 @@ function Run2Point(run){
   return point;
 }
 
-function PopulateRunnerFlotInfo(runner){
+function GenerateFlotPoints(runner){
   var this_runners_flot_info = [];
-  this_runners_flot_info["label"] = "("+runner["rank"]+") "+runner["name"];
-  this_runners_flot_info["data"] = [];
-  this_runners_flot_info["index"] = runner["rank"];
+  var rank = runner["rank"];
+  var legend_label = "("+rank+") "+runner["name"];
+
+
   var runs = runner["runs"];
   runs.sort(compareRunsByDate);
+
+
+  var points_data = [];
+
   for(var run_index in runs){
     var run = runs[run_index];
     var point = Run2Point(run);
     point[2] = runner["name"];
-    this_runners_flot_info["data"].push(point);
+    point[3] = runner["rank"];
+    points_data.push(point);
   }
-  return this_runners_flot_info;
+  var flot_points = {
+    data: points_data,
+    points:{
+      fill: 1,
+      fillColor: false,
+      lineWidth: "1"
+    },
+    lines:{
+      show: false
+    },
+    color: rank,
+    label: legend_label,
+    index: rank
+  };
+  return flot_points;
 }
-function GeneratePBLines(runner, points){
+function GenerateFlotPBLines(runner, points){
   var previous_PB_time = null;
   var line_data = [];
   for(var point_index in points){
@@ -614,7 +664,7 @@ function GeneratePBLines(runner, points){
       previous_PB_time = new_PB_time;
     }
   }
-  var lines = {
+  var flot_lines = {
     data:line_data,
     points:{
       show:false
@@ -622,12 +672,12 @@ function GeneratePBLines(runner, points){
     lines:{
       show: true
     },
-    color: runner["rank"]
+     color: runner["rank"]
   };
-  return lines;
+  return flot_lines;
 }
 
-function GenerateWRs(all_point_arrays){
+function GenerateFlotWRPoints(all_point_arrays){
   all_points = [];
   for(var runner_index in all_point_arrays){
     var runner = all_point_arrays[runner_index];
@@ -642,31 +692,43 @@ function GenerateWRs(all_point_arrays){
   all_points.sort(comparePointsByXBreakTiesByY);
   var min_time = 9999999999999;
 
+  my_page_info.wr_holders = [];
+
   for(point_index in all_points){
     var point = all_points[point_index];
-    var date = point[0];
+   
     var time = point[1];
-    var runner_name = point[2];
-    var runner_rank = point["rank"];
-    var readable_date = new Date(date).toDateString();
-    var readable_time = ms2HMS(time);
     if(time < min_time){
       min_time = time;
-      var message =( runner_name+ " got a WR(" + readable_time + ") on " + readable_date);
+      var date = point[0];
+      var runner_name = point[2];
+      var runner_rank = point[3];
+      my_page_info.wr_holders.push(runner_rank);
+      // console.log(runner_rank + ": " + runner_name);
+      var readable_date = new Date(date).toDateString();
+      var readable_time = ms2HMS(time);
+      var message =( "(" + runner_rank + ") " + runner_name+ " got a WR(" + readable_time + ") on " + readable_date);
       WR_data.push([date, time, message]);
     }
   }
-  var WR_circles = {
+  var flot_wr_points = {
     data: WR_data,
     label:"WRs",
     points:{
+      show: true,
       symbol:"diamond",
-      radius: 5
+      lineWidth: 3,
+      radius: 5,
+      fill: false
+    },
+    lines:{
+      show:false
     },
     index: 0
   }
-  return WR_circles;
+  return flot_wr_points;
 }
+
 function comparePointsByXBreakTiesByY(p1,p2){
   var x1 = p1[0], x2 = p2[0];
   var y1 = p1[1], y2 = p2[1];
@@ -693,12 +755,28 @@ function PlotOverviewPlot(){
 }
 
 function toggleRunner(rank){
+  console.log("toggling " + rank);
   var plot = my_flot_graph.plot;
   var plot_data = my_flot_graph.plot.getData();
+  // console.log(plot_data);
+  console.log(my_flot_graph);
 
-  var points_index = rank*2;
-  var lines_index = rank*2-1;
+  var first_index = plot_data.length-1-1; // WR is the last element
+  var points_offset = (rank-1)*2;
+  var count_backwards = true;
+  if(count_backwards){
+    points_offset = -points_offset;
+    lines_offset = points_offset-1;
+  }
+  else{
+    lines_offset = points_offset+1;
+  }
 
+  var points_index = first_index+points_offset;
+  var lines_index = first_index+lines_offset;
+
+  console.log(points_index);
+  console.log(lines_index);
 
 
   plot_data[points_index].points.show = !plot_data[points_index].points.show;
@@ -706,6 +784,14 @@ function toggleRunner(rank){
     plot_data[lines_index].lines.show = !plot_data[lines_index].lines.show;
   }
   plot.draw();
+}
+
+function HideLowRunners(){
+
+  var num_runners = my_flot_graph.plot.getData().length
+  for(var rank = my_page_info.max_runner; rank < 51; ++rank){
+    toggleRunner(rank);
+  }
 }
 
 function InitializeFlotGraph(){
@@ -730,16 +816,17 @@ function InitializeFlotGraph(){
       position:"ne",
       backgroundColor: "green",
       noColumns:2,
+      sorted: "reverse",
       container: $("#legend_div"),
       labelFormatter: function(label, series){
-        return '<a href="#" onClick="toggleRunner('+series.index+'); return false;">' + label+'</a>';
+        return label;
+        // return '<a href="#" onClick="toggleRunner('+series.index+'); return false;">' + label+'</a>';
       }
     },
     points: {
       show: true, 
-      radius: 2, 
-      lineWidth: 4, 
-      fill: false 
+      radius: 3.5, 
+      lineWidth: 1
     },
     lines: { 
       show: false 
@@ -754,7 +841,7 @@ function InitializeFlotGraph(){
       show: false
     },
     lines:{
-      show: false
+      show: true
     },
     points:{
       show: true,
@@ -913,34 +1000,34 @@ function enableDropdownGameSelection(){
     QueryScrapingHub(job,UpdatePageCallback);
   });
 }
+
 function AddGamesToDropdown(){
   var min_job = my_sh_info.min_job;
   var max_job = my_sh_info.latest_job;
   var current_job = min_job;
   $("#game_dropdown").empty();
 do{
-// if(current_job == my_sh_info.job)continue;
 var callback_function = AddGameToDropdownCallback(current_job);
 QueryScrapingHub(current_job,callback_function);
 ++current_job;
 }while(current_job <= max_job)
 }
+
 function AddGameToDropdownCallback(current_job){
   return function(data, textStatus, jqXHR){
     var game_name = data[0]["game"];
     var short_name = game_name;
     var long_name = full_names[short_name];
-    if(current_job == my_sh_info.job){
-// this sets the my_sh_info.job to be the first one that shows up
-// instead of being random based on the order they load
-// this helps match what is actually graphed first, which is the the my_sh_info.job game
+    //prioritize oot
+    if(short_name == "oot" ){
       SetZSRIframe(short_name,"");
-PrependGameToDropdown(short_name,long_name,current_job);
-}
-else{
-  AppendGameToDropdown(short_name,long_name,current_job);
-}
-}
+      QueryScrapingHub(current_job, UpdatePageCallback);
+      PrependGameToDropdown(short_name,long_name,current_job);
+    }
+    else{
+      AppendGameToDropdown(short_name,long_name,current_job);
+    }
+  }
 }
 function AppendGameToDropdown(short_name, long_name, job_number){
   $("#game_dropdown").append("<option value='"+job_number+"' name='"+ short_name+"'>"+long_name+"</option>");
@@ -974,8 +1061,18 @@ function EnableZoomToFitButton(){
   $("#zoom_to_fit_button").click(function(){
     UpdateGraphZoom();
     Graph(my_game_info);
+    // ShowAllWRHolders();
+    // HideLowRunners();
   });
-
+}
+function ShowAllWRHolders(){
+  var holders = my_page_info.wr_holders;
+  for(var index in holders){
+    var rank = holders[index];
+    console.log(index + ": " + rank);
+    toggleRunner(rank);
+  }
+  console.log("done");
 }
 
 function EnableZSRIframe(){
@@ -985,6 +1082,12 @@ function EnableZSRIframe(){
   });
   $("#category_dropdown").change(function(){
     var short_category_name = $("#category_dropdown option:selected").attr("name");
+  });
+}
+
+function EnableShowWRHoldersCheckbox(){
+  $("#show_wr_holders_checkbox").change(function(){
+      Graph(my_game_info);
   });
 }
 
@@ -1004,6 +1107,7 @@ $(document).ready(function(){
   EnableZoomToFitButton();
   EnableZSRIframe();
   HalfWidthOfBlurb();
+  EnableShowWRHoldersCheckbox();
 });
 
 function HalfWidthOfBlurb(){
