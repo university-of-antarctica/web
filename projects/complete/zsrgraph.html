@@ -169,17 +169,7 @@
     
   
     <h1> ZSRGraph </h1>
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
-
-<script src="../../javascripts/flot/jquery.flot.js" type="text/javascript"></script>
-
-<script src="../../javascripts/flot/jquery.flot.time.js" type="text/javascript"></script>
-
-<script src="../../javascripts/flot/jquery.flot.selection.js" type="text/javascript"></script>
-
-<script src="../../javascripts/flot/jquery.flot.symbol.js" type="text/javascript"></script>
-
-<div id="blurb" class = "well">
+    <div id="blurb" class = "well">
 
   <img class="img-circle" src='http://s3.amazonaws.com/zeldaspeedruns/app/public/system/icons/13/large/link.png?1424044151' alt="ZSRGraph" style="width:140px; height:140px">
   <p>
@@ -215,16 +205,29 @@
 
 <div class="row"></div>
 
-<iframe id="zsr_iframe" src="" class="col-md-12" style="height:300px;"></iframe>
+<!-- <iframe id="zsr_iframe" src="" class="col-md-12" style="height:300px;"></iframe> -->
 
-<h1 id="title"> 
+<h1 id="title">
   Loading...
 </h1>
 
 <div id="controls" class ="col-md-12">
-  Game: <select id="game_dropdown"></select>
-  <br>
-  Category: <select id="category_dropdown"></select>
+  <div class="col-md-6">
+    <div class="input-group">
+      <label for="game_dropdown">Game: </label>
+      <select class="form-control" id="game_dropdown"></select>
+    </div>
+    <div class="input-group">
+      <label for="game_dropdown">Category: </label>
+      <select class="form-control" id="category_dropdown"></select>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <a class ="btn btn-default" id= "title_link" href ="" target="_blank">
+      <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+      View on ZeldaSpeedRuns.com
+    </a> 
+  </div>
 </div>
 
 <div class="row"></div>
@@ -240,7 +243,12 @@
 <div class = "col-md-6">
   Showing Top<input id="max_runners_input" type="number" min="0" max ="50" value="4"></input> Runners (Max of 50)
   <br>
-  <input type="checkbox" id="show_wr_holders_checkbox">Show Everyone who has held a World Record</input>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="show_wr_holders_checkbox" value="">
+      Show Everyone who has held a World Record
+    </label>
+  </div>
   <h3>Legend</h3>
   <p>
     Runners being graphed are listed below. <br>
@@ -263,6 +271,16 @@
     Direct feedback to <a href="mailto:lovestevend+uant@gmail.com">lovestevend+uant@gmail.com</a>
   </p>
 </div>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.time.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.selection.js" type="text/javascript"></script>
+
+<script src="../../javascripts/flot/jquery.flot.symbol.js" type="text/javascript"></script>
 
 <script>
 
@@ -287,57 +305,60 @@ full_names["albw"] = "A Link Between Worlds";
 full_names["mm3d"] = "Majora's Mask 3D";
 
 
-// Figure outverified runs
-
-// run: [???]
-// point : [date_in_ms, time_in_ms, extra_info]
-// runs: [run,run2,run3,...]
-// runner: [name, game, category, runs, best_run_time, best_run_date, rank, wrholder]
-
-
-
-
-
-
 var my_flot_graph = {};
-var my_game_info = {};
-var my_sh_info = {};
+var my_game_json = {};
 var my_page_info = {};
 
-my_sh_info.project = 17416;
-my_sh_info.spider = 1;
 
-my_sh_info.job_range = 17;
-// my_sh_info.job = 33;
-my_sh_info.latest_job = null;
+const NUM_GAMES = 17;
+
+
+my_page_info.jobs_set = {};
+my_page_info.job_to_game_json = {};
 
 my_page_info.max_runner = 4;
 my_page_info.wr_holders = [];
 
 
-function DetermineJobRange(){
-  var url = "http://uofantarctica.com/scrapinghub/jobs";
-  var callback = function(data, textStatus, jqXHR){
-
-    var job_number = GetLatestJobNumber(data);
-    my_sh_info.latest_job = job_number;
-    var distance_to_min = my_sh_info.job_range-1;
-    my_sh_info.min_job = my_sh_info.latest_job - distance_to_min;
-    my_sh_info.job = my_sh_info.latest_job;
-    // make use of our knowledge of the latest complete jobs
-    // QueryScrapingHub(my_sh_info.job,UpdatePageCallback);
-    enableDropdownGameSelection();
-  }
-  $.getJSON(url,null,callback);
+function dbg(str){
+  console.log(str);
 }
 
-function GetLatestJobNumber(data){
+function main(){
+  dbg("main");
+  ScrapeScrapingHub();
+}
+
+function ScrapeScrapingHub(){
+  var url = "http://uofantarctica.com/scrapinghub/jobs";
+  $.getJSON(url,null,function(job_list_data, textStatus, jqXHR){
+    dbg("scrape scrapinghub callback");
+    DetermineJobsToGraph(job_list_data);
+    RecordAllGamesData();
+  })
+}
+
+function DetermineJobsToGraph(job_list_data){
+  dbg("determining jobs to graph");
+  // var latest = GetLatestJobNumberFromJobListJSON(job_list_data);
+  var latest = 49;
+  var earliest = latest - (NUM_GAMES - 1)
+  for(var i = earliest; i <= latest; ++i){
+    my_page_info.jobs_set[i]=true;
+  }
+  dbg("jobs to graph: ");
+  dbg(my_page_info.jobs_set);
+}
+
+
+
+function GetLatestJobNumberFromJobListJSON(job_list_json){
+  var latest_job = job_list_json[0];
   //key_string looks like 17416/1/36, 36 is the job_number
-   var key_string = data[0]["key"];
-    var length_to_trim = 8
-    var job_number = key_string.slice(length_to_trim);
-    return job_number;
-   
+  var key_string = latest_job["key"];
+  var length_to_trim = 8
+  var latest_job_number = key_string.slice(length_to_trim);
+  return latest_job_number;
 }
 
 
@@ -346,48 +367,46 @@ function QueryScrapingHub(job, callback){
   $.getJSON(url,null, callback);
 }
 
-function UpdatePageCallback(data, textStatus, jqXHR){
 
-  my_game_info = data;
+function UpdatePage(game_json){
+  my_game_json = game_json;
+  var short_name = GetShortName(game_json);
   ProcessRunners();
-  // console.log(data);
-  UpdatePage(my_game_info);
-}
-
-function UpdatePage(game_info){
-  UpdateTitle(game_info);
-  UpdateCategoriesDropdown(game_info);
+  UpdateTitle(game_json);
+  SetZSRIframe(short_name);
+  UpdateCategoriesDropdown(game_json);
   UpdateGraphZoom();
-  Graph(game_info);
+  Graph(game_json);
 }
 
 function UpdateGraphZoom(){
   my_flot_graph.ranges = null;
 }
 
-function UpdateTitle(game_info){
-  SetPageTitle(GetLongName(game_info) + " speed runs!");
+function UpdateTitle(game_json){
+  SetPageTitle(GetLongName(game_json) + " speed runs!");
 }
 function SetPageTitle(title){
   $("#title").text(title);
 }
-function GetLongName(game_info){
-  var short_name = GetShortName(game_info);
+function GetLongName(game_json){
+  var short_name = GetShortName(game_json);
   var long_name = full_names[short_name];
   return long_name;
 }
-function GetShortName(game_info){
-  var short_name = game_info[0]["game"];
+function GetShortName(game_json){
+  var first_run = game_json[0];
+  var short_name = first_run["game"];
   return short_name;
 }
-function UpdateCategoriesDropdown(game_info){
-  var category_set = GetSetOfCategories(game_info);
+function UpdateCategoriesDropdown(game_json){
+  var category_set = GetSetOfCategories(game_json);
   PopulateCategoryDropdown(category_set);
 }
-function GetSetOfCategories(game_info){
+function GetSetOfCategories(game_json){
   var categories = {};
-  for (var index in game_info){
-    var runner = game_info[index];
+  for (var index in game_json){
+    var runner = game_json[index];
     categories[runner["category"]]=true;
   }
   return categories;
@@ -429,8 +448,8 @@ function SortRunners(runners){
 }
 
 
-function Graph(game_info){
-  PreparePlottableData(game_info); // getplottabledata -> prune low
+function Graph(game_json){
+  PreparePlottableData(game_json); // getplottabledata -> prune low
   PlotMainPlot();
   PlotOverviewPlot();
   if(my_flot_graph.ranges){
@@ -438,11 +457,11 @@ function Graph(game_info){
   }
 }
 
-function PreparePlottableData(game_info){
-  var runners = GetPlottableRunners(game_info);
+function PreparePlottableData(game_json){
+  var runners = GetPlottableRunners(game_json);
   my_flot_graph.data = GetPlottableData(runners);
 }
-function GetPlottableRunners(game_info){
+function GetPlottableRunners(){
   var desired_category = $("#category_dropdown").val()
   var runners = GetRunnersInCategory(desired_category);
   return runners;
@@ -450,8 +469,8 @@ function GetPlottableRunners(game_info){
 
 function GetRunnersInCategory(category){
   var runners = [];
-  for(var runner_index in my_game_info){
-    var runner = my_game_info[runner_index];
+  for(var runner_index in my_game_json){
+    var runner = my_game_json[runner_index];
     var desired_category = category
     var actual_category = runner["category"];
     if(actual_category != desired_category){
@@ -496,7 +515,7 @@ function compareRunnersByBestTime(runner1, runner2){
 }
 
 function RecordRunnersBestTimes(){
-  var runners = my_game_info;
+  var runners = my_game_json;
   var best_run_date;
   for(var runner_index in runners){
     var runner = runners[runner_index];
@@ -516,7 +535,7 @@ function RecordRunnersBestTimes(){
 }
 
 function RecordRunnersRanks(){
-  var category_set = GetSetOfCategories(my_game_info);
+  var category_set = GetSetOfCategories(my_game_json);
   for(category in category_set){
     var category_runners = GetRunnersInCategory(category);
     SortRunners(category_runners);
@@ -973,7 +992,7 @@ return result;
 
 // ENABLE THE UI
 
-function enableTooltip(){
+function EnableTooltip(){
   $("<div id='tooltip'></div>").css({
     position: "absolute",
     display: "none",
@@ -1011,48 +1030,52 @@ function enableTooltip(){
 
 // DROP DOWNS
 
-function enableDropdownCategorySelection(){
+function EnableDropdownCategorySelection(){
   $("#category_dropdown").change(function(){
     UpdateGraphZoom();
-    Graph(my_game_info);
+    Graph(my_game_json);
   });
 }
-function enableDropdownGameSelection(){
-  AddGamesToDropdown();
+function EnableDropdownGameSelection(){
   $("#game_dropdown").change(function(){
     var job = $("#game_dropdown").val();
-    QueryScrapingHub(job,UpdatePageCallback);
+    game_json = my_page_info.job_to_game_json[job];
+    UpdatePage(game_json);
   });
 }
 
-function AddGamesToDropdown(){
-  var min_job = my_sh_info.min_job;
-  var max_job = my_sh_info.latest_job;
-  var current_job = min_job;
-  $("#game_dropdown").empty();
-do{
-var callback_function = AddGameToDropdownCallback(current_job);
-QueryScrapingHub(current_job,callback_function);
-++current_job;
-}while(current_job <= max_job)
-}
 
-function AddGameToDropdownCallback(current_job){
-  return function(data, textStatus, jqXHR){
-    var game_name = data[0]["game"];
-    var short_name = game_name;
-    var long_name = full_names[short_name];
-    //prioritize oot
-    if(short_name == "oot" ){
-      SetZSRIframe(short_name,"");
-      QueryScrapingHub(current_job, UpdatePageCallback);
-      PrependGameToDropdown(short_name,long_name,current_job);
-    }
-    else{
-      AppendGameToDropdown(short_name,long_name,current_job);
-    }
+function RecordAllGamesData(){
+  dbg("record all games data");
+  for(var job in my_page_info.jobs_set){
+    var callback = MakeReactToGameCallback(job);
+    QueryScrapingHub(job, callback);
   }
 }
+function MakeReactToGameCallback(job){
+  return function(data){
+    ReactToGameData(job,data);
+  }
+}
+
+function ReactToGameData(job, game_json){
+  
+  var short_name = GetShortName(game_json);
+  var long_name = GetLongName(game_json);
+  dbg("reacting to job " + job + " (" + long_name + ")");
+
+  my_page_info.job_to_game_json[job]=game_json;
+
+  if(short_name == "oot"){
+    PrependGameToDropdown(short_name,long_name,job);
+    UpdatePage(game_json);
+  }
+  else{
+    AppendGameToDropdown(short_name,long_name,job);
+  }
+  
+}
+
 function AppendGameToDropdown(short_name, long_name, job_number){
   $("#game_dropdown").append("<option value='"+job_number+"' name='"+ short_name+"'>"+long_name+"</option>");
 }
@@ -1061,16 +1084,15 @@ function PrependGameToDropdown(short_name, long_name , job_number){
   $("#game_dropdown").val(job_number);
 }
 
-
 function EnableMaxRunnersInput(){
   $("#max_runners_input").change(function(){
-    Graph(my_game_info);
+    Graph(my_game_json);
   });
 }
 
 function EnableRedrawGraphOnResize(){
   $(window).resize(function(){
-    Graph(my_game_info);
+    Graph(my_game_json);
   })
 }
 
@@ -1084,7 +1106,7 @@ function EnableConfusedText(){
 function EnableZoomToFitButton(){
   $("#zoom_to_fit_button").click(function(){
     UpdateGraphZoom();
-    Graph(my_game_info);
+    Graph(my_game_json);
   });
 }
 function ShowAllWRHolders(){
@@ -1098,7 +1120,7 @@ function ShowAllWRHolders(){
 function EnableZSRIframe(){
   $("#game_dropdown").change(function(){
     var short_game_name = $("#game_dropdown option:selected").attr("name");
-    SetZSRIframe(short_game_name,"");
+    SetZSRIframe(short_game_name);
   });
   $("#category_dropdown").change(function(){
     var short_category_name = $("#category_dropdown option:selected").attr("name");
@@ -1107,20 +1129,23 @@ function EnableZSRIframe(){
 
 function EnableShowWRHoldersCheckbox(){
   $("#show_wr_holders_checkbox").change(function(){
-      Graph(my_game_info);
+      Graph(my_game_json);
   });
 }
 
-function SetZSRIframe(game,category){
-  $("#zsr_iframe").attr("src","http://zeldaspeedruns.com/leaderboards/"+game+"/"+category);
+function SetZSRIframe(game){
+  var url = "http://zeldaspeedruns.com/leaderboards/"+game;
+
+  $("#title_link").attr("href",url);
 }
 
 $(document).ready(function(){
-  enableTooltip();
-  DetermineJobRange();
+  EnableTooltip();
+  main();
   my_flot_graph = InitializeFlotGraph();
   EnableZooming(my_flot_graph);
-  enableDropdownCategorySelection();
+  EnableDropdownCategorySelection();
+  EnableDropdownGameSelection();
   EnableMaxRunnersInput();
   EnableRedrawGraphOnResize();
   EnableConfusedText();
