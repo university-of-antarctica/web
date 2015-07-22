@@ -321,7 +321,7 @@ my_page_info.wr_holders = [];
 
 
 function dbg(str){
-  console.log(str);
+  // console.log(str);
 }
 
 function main(){
@@ -340,8 +340,8 @@ function ScrapeScrapingHub(){
 
 function DetermineJobsToGraph(job_list_data){
   dbg("determining jobs to graph");
-  // var latest = GetLatestJobNumberFromJobListJSON(job_list_data);
-  var latest = 49;
+  var latest = GetLatestJobNumberFromJobListJSON(job_list_data);
+  // var latest = 49;
   var earliest = latest - (NUM_GAMES - 1)
   for(var i = earliest; i <= latest; ++i){
     my_page_info.jobs_set[i]=true;
@@ -444,7 +444,7 @@ function ProcessRunners(){
 }
 
 function SortRunners(runners){
-  runners.sort(compareRunnersByBestTime);
+  runners.sort(compareRunnersByBestTimeBreakTiesByDate);
 }
 
 
@@ -503,14 +503,31 @@ function PruneLowRunners(runners){
 }
 
 
-function compareRunnersByBestTime(runner1, runner2){
+function compareRunnersByBestTimeBreakTiesByDate(runner1, runner2){
+  // console.log(runner1);
+  // console.log(runner2);
+
   var t1 = runner1["best_run_time"];
   var t2 = runner2["best_run_time"];
 
+  var d1 = MDY2ms(runner1["best_run_date"]);
+  var d2 = MDY2ms(runner2["best_run_date"]);
+
+  // console.log(d1 + " " + d2);
+
   var result = null;
   if(t1 < t2) result = -1;
-  if(t1 == t2) result = 0;
+  if(t1 == t2){
+    if(d1<d2) result = -1;
+    if(d1>d2) result = 1;
+    if(d1==d2) result = 0;
+    // console.log(d1 + " " + result + " " + d2);
+  }
   if(t1 > t2) result = 1;
+ 
+  // console.log(t1 + " " + result + " " + t2);
+
+
   return result;
 }
 
@@ -530,7 +547,7 @@ function RecordRunnersBestTimes(){
       }
     }
     runner["best_run_date"] = best_run_date;
-    runner["best_run_time"] = min_time;
+    runner["best_run_time"] = min_time.getTime();
   }
 }
 
@@ -539,10 +556,26 @@ function RecordRunnersRanks(){
   for(category in category_set){
     var category_runners = GetRunnersInCategory(category);
     SortRunners(category_runners);
+
+    // console.log(category_runners);
+
+    var prev_best_time = 99999999999;
+    var prev_rank = 1;
+
     for(var runner_index in category_runners){
       var runner = category_runners[runner_index];
-      var rank = parseInt(runner_index) + 1;
+      if(runner["best_run_time"] == prev_best_time){
+        var rank = prev_rank;
+      }
+      else{
+        var rank = parseInt(runner_index) + 1;
+      }
+
       runner["rank"] = rank
+      runner["index"] = parseInt(runner_index)+1;
+
+      prev_best_time = runner["best_run_time"];
+      prev_rank = rank;
     }
   }
 }
@@ -676,7 +709,7 @@ function GenerateFlotPoints(runner){
     lines:{
       show: false
     },
-    color: rank,
+    color: runner["index"],
     label: legend_label,
     index: rank
   };
@@ -713,7 +746,7 @@ function GenerateFlotPBLines(runner, points){
     lines:{
       show: true
     },
-     color: runner["rank"],
+     color: runner["index"],
      hoverable: false
   };
   return flot_lines;
@@ -841,10 +874,12 @@ function InitializeFlotGraph(){
   flot_graph.plot ={};
   flot_graph.overview = {};
   flot_graph.data = [];
+  var today = new Date().getTime();
   flot_graph.main_graph_options = 
   {
     xaxis: {
-      mode: "time", timeformat: "%m/%d/%y" 
+      mode: "time", timeformat: "%m/%d/%y" ,
+      max: today
     },
     yaxis: {
       mode: "time", timeformat: "%H:%M:%S"
@@ -893,7 +928,8 @@ function InitializeFlotGraph(){
       mode: "xy"
     },
     xaxis: {
-      mode: "time", timeformat: "%m/%y" 
+      mode: "time", timeformat: "%m/%y",
+      max: today
     },
     yaxis: {
       mode: "time", timeformat: "%H:%M:%S"
